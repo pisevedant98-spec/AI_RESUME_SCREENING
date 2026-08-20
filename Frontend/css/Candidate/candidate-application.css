@@ -1,0 +1,361 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f0f4f8;
+  color: #1e293b;
+}
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Matching Profile */
+.sidebar {
+  width: 260px;
+  background-color: #0d141e;
+  color: #94a3b8;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.portal-title {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 28px;
+  padding-left: 8px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #94a3b8;
+  text-decoration: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-item .nav-icon {
+  font-size: 16px;
+}
+
+.nav-item:hover {
+  color: #ffffff;
+  background-color: #16202e;
+}
+
+.nav-item.active {
+  background-color: #00b894;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding-top: 16px;
+  border-top: 1px solid #16202e;
+  margin-top: auto;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ff6b6b;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 107, 107, 0.1);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 36px 48px;
+  max-width: 1200px;
+}
+
+.content-header {
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.page-subtitle {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Top Metric Cards */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid #edf2f7;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metric-number {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.metric-label {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.text-teal { color: #00b894; }
+.text-blue { color: #0284c7; }
+.text-yellow { color: #d97706; }
+
+/* Application Cards */
+.section-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  margin-bottom: 22px;
+  border: 1px solid #edf2f7;
+}
+
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.badge-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.pill-badge {
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.status-shortlisted { background: #e6fcf5; color: #00b894; }
+.status-review { background: #e0f2fe; color: #0284c7; }
+.status-applied { background: #fef3c7; color: #d97706; }
+
+.job-heading {
+  font-size: 19px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.job-sub {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.match-badge {
+  background: #e6fcf5;
+  border: 1px solid #c3fae8;
+  padding: 6px 14px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.match-num {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #00b894;
+}
+
+.match-lbl {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #00b894;
+  font-weight: 600;
+}
+
+/* Stepper Progress Bar */
+.stepper-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0 25px;
+  padding: 15px 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.step-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step.completed .step-circle {
+  background: #00b894;
+  color: #ffffff;
+}
+
+.step.active .step-circle {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+}
+
+.step-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.step.completed .step-label,
+.step.active .step-label {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.step-line {
+  flex: 1;
+  height: 3px;
+  background: #e2e8f0;
+  margin: 0 8px 18px 8px;
+}
+
+.step-line.completed {
+  background: #00b894;
+}
+
+/* Bottom Controls */
+.card-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 16px;
+}
+
+.status-note {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-primary {
+  background-color: #00b894;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.btn-danger-outline {
+  background: #ffffff;
+  border: 1px solid #fca5a5;
+  color: #ef4444;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-danger-outline:hover {
+  background: #fee2e2;
+}
+
+@media (max-width: 800px) {
+  .dashboard-container { flex-direction: column; }
+  .sidebar { width: 100%; }
+  .main-content { padding: 20px; }
+  .stepper-container { overflow-x: auto; justify-content: flex-start; gap: 15px; }
+  .card-bottom-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+}

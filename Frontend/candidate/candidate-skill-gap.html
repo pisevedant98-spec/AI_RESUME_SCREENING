@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Gap Analysis - Candidate Portal</title>
+  <link rel="stylesheet" href="../css/Candidate/candidate-skill-gap.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2 class="portal-title">Candidate Portal</h2>
+      <nav class="sidebar-nav">
+        <a href="candidate-dashboard.html" class="nav-item">
+          <span class="nav-icon">🏚️</span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">My Profile</span>
+        </a>
+        <a href="candidate-job.html" class="nav-item">
+          <span class="nav-icon">💼</span>
+          <span class="nav-text">Browse Jobs</span>
+        </a>
+        <a href="candidate-application.html" class="nav-item">
+          <span class="nav-icon">📄</span>
+          <span class="nav-text">My Applications</span>
+        </a>
+        <a href="candidate-resume.html" class="nav-item">
+          <span class="nav-icon">📑</span>
+          <span class="nav-text">My Resume</span>
+        </a>
+        <a href="candidate-skill-gap.html" class="nav-item active">
+          <span class="nav-icon">🧩</span>
+          <span class="nav-text">Skill Gap Analysis</span>
+        </a>
+        <a href="candidate-interviews.html" class="nav-item">
+          <span class="nav-icon">🗓️</span>
+          <span class="nav-text">My Interviews</span>
+        </a>
+        <a href="candidate-notifications.html" class="nav-item">
+          <span class="nav-icon">🔔</span>
+          <span class="nav-text">Notifications</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="candidate-login.html" class="logout-btn">
+          <span class="logout-icon">🚪</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="content-header">
+        <h1 class="page-title">Skill Gap Analysis</h1>
+        <p class="page-subtitle">Compare your extracted skills against specific job role requirements.</p>
+      </header>
+
+      <!-- Target Job Selection Card -->
+      <section class="section-card">
+        <h3 class="section-heading">Select Target Job Position</h3>
+        <p class="section-subtext">Choose a position to run real-time semantic skill comparison.</p>
+        <div class="select-wrapper">
+          <select id="targetJobSelect" class="form-select">
+            <option value="" disabled selected>-- Select a Job Position --</option>
+            <option value="aiml">AI / ML Intern</option>
+            <option value="python">Python Backend Developer</option>
+            <option value="data">Data Analyst Intern</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Analysis Results View (Dynamic Container) -->
+      <div id="skillGapResults">
+        <section class="section-card">
+          <div class="result-header">
+            <div>
+              <h3 class="job-heading" id="selectedRoleTitle">AI / ML Intern</h3>
+              <p class="job-sub">Analysis based on your current active resume</p>
+            </div>
+            <div class="match-badge">
+              <span class="match-num" id="skillMatchPercent">75%</span>
+              <span class="match-lbl">Skill Match</span>
+            </div>
+          </div>
+
+          <!-- Matched vs Missing Skills Grid -->
+          <div class="skills-comparison-grid">
+            <div class="skill-column matched-col">
+              <h4 class="col-title">✅ Matched Skills</h4>
+              <div class="tags-group" id="matchedSkillsList">
+                <span class="tag-matched">Python</span>
+                <span class="tag-matched">Machine Learning</span>
+                <span class="tag-matched">SQL</span>
+                <span class="tag-matched">NLP</span>
+              </div>
+            </div>
+
+            <div class="skill-column missing-col">
+              <h4 class="col-title">✗ Missing / Recommended Skills</h4>
+              <div class="tags-group" id="missingSkillsList">
+                <span class="tag-missing">AWS</span>
+                <span class="tag-missing">Docker</span>
+                <span class="tag-missing">FastAPI</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommended Actions -->
+          <div class="card-bottom-row">
+            <span class="exp-info">💡 Tip: Adding missing skills to your projects can boost your match score.</span>
+            <a href="candidate-resume.html" class="btn-primary">Update Resume</a>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/Candidate-js/candidate-skill-gap.js"></script>
+</body>
+</html>

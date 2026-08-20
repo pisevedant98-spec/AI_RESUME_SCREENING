@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Candidate Dashboard</title>
+  <link rel="stylesheet" href="../css/Candidate/candidate-dashboard.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Candidate Portal</h2>
+      <nav>
+        <a href="candidate-dashboard.html" class="active">
+          <span class="nav-icon">🏚️</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="profile.html">
+          <span class="nav-icon">👤</span>
+          <span>My Profile</span>
+        </a>
+        <a href="candidate-job.html">
+          <span class="nav-icon">💼</span>
+          <span>Browse Jobs</span>
+        </a>
+        <a href="candidate-application.html">
+          <span class="nav-icon">📄</span>
+          <span>My Applications</span>
+        </a>
+        <a href="candidate-resume.html">
+          <span class="nav-icon">📑</span>
+          <span>My Resume</span>
+        </a>
+        <a href="candidate-skill-gap.html">
+          <span class="nav-icon">🧩</span>
+          <span>Skill Gap Analysis</span>
+        </a>
+        <a href="candidate-interviews.html">
+          <span class="nav-icon">🗓️</span>
+          <span>My Interviews</span>
+        </a>
+        <a href="candidate-notifications.html">
+          <span class="nav-icon">🔔</span>
+          <span>Notifications</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <h1>Candidate Dashboard</h1>
+        <p>Manage your profile, applications, and job opportunities.</p>
+      </header>
+
+      <!-- Stat Cards -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📑</div>
+          <div class="stat-info">
+            <h3>Not Uploaded</h3>
+            <p>Resume Status</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💼</div>
+          <div class="stat-info">
+            <h3>0</h3>
+            <p>Available Jobs</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📄</div>
+          <div class="stat-info">
+            <h3>0</h3>
+            <p>Jobs Applied</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🗓️</div>
+          <div class="stat-info">
+            <h3>0</h3>
+            <p>Scheduled Interviews</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Actions -->
+      <section class="section-card">
+        <h2>Quick Actions</h2>
+        <div class="action-grid">
+          <a href="candidate-resume.html" class="action-card">
+            <span class="action-icon">📤</span>
+            <div>
+              <h4>Upload Resume</h4>
+              <p>Upload your resume to start AI screening</p>
+            </div>
+          </a>
+          <a href="candidate-job.html" class="action-card">
+            <span class="action-icon">💼</span>
+            <div>
+              <h4>Browse Jobs</h4>
+              <p>Explore current openings and apply</p>
+            </div>
+          </a>
+          <a href="candidate-skill-gap.html" class="action-card">
+            <span class="action-icon">🧩</span>
+            <div>
+              <h4>Skill Gap Analysis</h4>
+              <p>Compare your skills with job requirements</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Split Area -->
+      <div class="dashboard-split">
+        <section class="section-card">
+          <div class="card-header">
+            <h3>Recent Applications</h3>
+            <a href="candidate-application.html" class="view-link">View All</a>
+          </div>
+          <div class="empty-placeholder">
+            <p>No applications submitted yet.</p>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div class="card-header">
+            <h3>Upcoming Interviews</h3>
+            <a href="candidate-interviews.html" class="view-link">View All</a>
+          </div>
+          <div class="empty-placeholder">
+            <p>No interviews scheduled yet.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/Candidate-js/candidate-dashboard.js"></script>
+</body>
+</html>

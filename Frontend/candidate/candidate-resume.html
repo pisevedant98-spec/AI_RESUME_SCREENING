@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Resume</title>
+
+    <link rel="stylesheet" href="../css/Candidate/candidate-resume.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <h2>Candidate Portal</h2>
+
+            <nav>
+
+                <a href="candidate-dashboard.html">
+                    🏠 Dashboard
+                </a>
+
+                <a href="profile.html">
+                    👤 Profile
+                </a>
+
+                <a href="candidate-resume.html" class="active">
+                    📄 My Resume
+                </a>
+
+                <a href="candidate-job.html">
+                    💼 Job Opportunities
+                </a>
+
+                <a href="candidate-skill-gap.html">
+                    🧩 Skill Gap Analysis
+                </a>
+
+                <a href="candidate-application.html">
+                    📊 Applications
+                </a>
+
+                <a href="candidate-interviews.html">
+                    📅 Interviews
+                </a>
+
+                <a href="../candidate-login.html">
+                    🚪 Logout
+                </a>
+
+            </nav>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <header class="page-header">
+
+                <div>
+                    <h1>My Resume</h1>
+
+                    <p>
+                        Upload and manage your resume for job applications.
+                    </p>
+                </div>
+
+                <a href="profile.html" class="profile-btn">
+                    👤 Profile
+                </a>
+
+            </header>
+
+
+            <!-- Upload Resume -->
+            <section class="resume-card">
+
+                <h2>Upload Resume</h2>
+
+                <p>
+                    Upload your latest resume in PDF format.
+                </p>
+
+                <div class="upload-box">
+
+                    <div class="upload-icon">
+                        📄
+                    </div>
+
+                    <label for="resumeFile" class="upload-label">
+                        Choose Resume
+                    </label>
+
+                    <input
+                        type="file"
+                        id="resumeFile"
+                        accept=".pdf"
+                    >
+
+                    <p id="fileName">
+                        No file selected
+                    </p>
+
+                    <button id="uploadBtn">
+                        Upload Resume
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- Current Resume -->
+            <section class="resume-card">
+
+                <h2>Current Resume</h2>
+
+                <div class="resume-item">
+
+                    <div class="resume-info">
+
+                        <span class="resume-icon">
+                            📄
+                        </span>
+
+                        <div>
+                            <h3 id="resumeTitle">
+                                No resume uploaded
+                            </h3>
+
+                            <p id="resumeStatus">
+                                Upload your resume to get started.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="resume-actions">
+
+                        <button class="download-btn" id="downloadBtn">
+                            Download
+                        </button>
+
+                        <button class="delete-btn" id="deleteBtn">
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Profile Reminder -->
+            <section class="profile-card">
+
+                <div>
+
+                    <h2>Complete Your Profile</h2>
+
+                    <p>
+                        Keep your profile updated so recruiters can better understand your skills and experience.
+                    </p>
+
+                </div>
+
+                <a href="profile.html">
+                    Go to Profile
+                </a>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="../js/Candidate-js/candidate-resume.js"></script>
+
+</body>
+
+</html>

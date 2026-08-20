@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Skill Gap Analysis</title>
+
+  <link rel="stylesheet" href="../css/HR/skill-gap.css">
+</head>
+
+<body>
+
+  <div class="dashboard">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+      <h2>HR Portal</h2>
+
+      <nav>
+
+        <a href="hr-dashboard.html">
+          🏠 Dashboard
+        </a>
+
+        <a href="jobs.html">
+          💼 Job Management
+        </a>
+
+        <a href="resumes.html">
+          📄 Resume Screening
+        </a>
+
+        <a href="shortlisting.html">
+          🤖 AI Shortlisting
+        </a>
+
+        <a href="skill-gap.html" class="active">
+          🧩 Skill Gap Analysis
+        </a>
+
+        <a href="interviews.html">
+          📅 Interview Management
+        </a>
+
+      </nav>
+
+      <a href="../hr-login.html" class="logout">
+        🚪 Logout
+      </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+      <div class="page-title">
+
+        <h1>Skill Gap Analysis</h1>
+
+        <p>
+          Compare candidate skills with the requirements of a selected job.
+        </p>
+
+      </div>
+
+
+      <!-- CONTROLS -->
+
+      <section class="analysis-controls">
+
+        <div class="control-grid">
+
+          <div class="control-group">
+
+            <label for="jobSelect">
+              Select Job
+            </label>
+
+            <select id="jobSelect">
+
+              <option value="">
+                Select a job opening
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="control-group">
+
+            <label for="candidateSelect">
+              Select Candidate
+            </label>
+
+            <select id="candidateSelect" disabled>
+
+              <option value="">
+                Select a candidate
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="primary-btn"
+            id="analyzeBtn"
+            disabled
+          >
+            🔍 Analyze Skill Gap
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- SUMMARY -->
+
+      <div class="summary-grid">
+
+        <div class="summary-card">
+
+          <span>
+            Skill Match
+          </span>
+
+          <strong id="matchPercentage">
+            0%
+          </strong>
+
+          <small>
+            Overall skill compatibility
+          </small>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <span>
+            Matched Skills
+          </span>
+
+          <strong id="matchedCount">
+            0
+          </strong>
+
+          <small>
+            Skills found in candidate resume
+          </small>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <span>
+            Missing Skills
+          </span>
+
+          <strong id="missingCount">
+            0
+          </strong>
+
+          <small>
+            Required skills not found
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- ANALYSIS RESULTS -->
+
+      <section class="analysis-section">
+
+        <div class="section-heading">
+
+          <h2>
+            Skill Gap Results
+          </h2>
+
+          <span id="analysisStatus">
+            No analysis available
+          </span>
+
+        </div>
+
+
+        <div id="analysisContent">
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+              🧩
+            </div>
+
+            <h3>
+              No Skill Gap Analysis Available
+            </h3>
+
+            <p>
+              Select a job and candidate to compare the candidate's
+              skills with the job requirements.
+              Results will come from the backend after candidate
+              applications and resumes are available.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- SKILL GAP JS -->
+
+  <script src="C:\Users\Admin\Desktop\Frontend\Js\HR\skill-gap.js"></script>
+
+</body>
+
+</html>

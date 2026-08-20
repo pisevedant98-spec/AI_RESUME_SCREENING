@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Resume Screening</title>
+
+  <!-- Resume Screening CSS -->
+  <link
+    rel="stylesheet"
+    href="../css/HR/resumes.css"
+  >
+
+</head>
+
+
+<body>
+
+  <div class="dashboard">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="sidebar">
+
+      <h2>
+        HR Portal
+      </h2>
+
+
+      <nav>
+
+        <a href="hr-dashboard.html">
+          🏠 Dashboard
+        </a>
+
+
+        <a href="jobs.html">
+          💼 Job Management
+        </a>
+
+
+        <a
+          href="resumes.html"
+          class="active"
+        >
+          📄 Resume Screening
+        </a>
+
+
+        <a href="shortlisting.html">
+          🤖 AI Shortlisting
+        </a>
+
+
+        <a href="skill-gap.html">
+          🧩 Skill Gap Analysis
+        </a>
+
+
+        <a href="interviews.html">
+          📅 Interview Management
+        </a>
+
+      </nav>
+
+
+      <a
+        href="../hr-login.html"
+        class="logout"
+      >
+        🚪 Logout
+      </a>
+
+    </aside>
+
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <main class="main-content">
+
+
+      <div class="page-title">
+
+        <h1>
+          Resume Screening
+        </h1>
+
+        <p>
+          Review and manage resumes submitted by candidates.
+        </p>
+
+      </div>
+
+
+
+      <!-- =========================
+           SUMMARY
+      ========================= -->
+
+      <div class="resume-summary">
+
+
+        <div class="summary-card">
+
+          <span>
+            Total Resumes
+          </span>
+
+          <strong id="totalResumes">
+            0
+          </strong>
+
+          <small>
+            Candidate applications received
+          </small>
+
+        </div>
+
+
+
+        <div class="summary-card">
+
+          <span>
+            Pending Review
+          </span>
+
+          <strong id="pendingResumes">
+            0
+          </strong>
+
+          <small>
+            Resumes waiting for review
+          </small>
+
+        </div>
+
+
+
+        <div class="summary-card">
+
+          <span>
+            Shortlisted
+          </span>
+
+          <strong id="shortlistedResumes">
+            0
+          </strong>
+
+          <small>
+            Candidates shortlisted
+          </small>
+
+        </div>
+
+
+
+        <div class="summary-card">
+
+          <span>
+            Rejected
+          </span>
+
+          <strong id="rejectedResumes">
+            0
+          </strong>
+
+          <small>
+            Candidates rejected
+          </small>
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- =========================
+           SEARCH & FILTER
+      ========================= -->
+
+      <div class="resume-tools">
+
+
+        <input
+          type="text"
+          id="resumeSearch"
+          placeholder="🔍 Search candidates..."
+        >
+
+
+        <select id="resumeStatus">
+
+          <option value="all">
+            All Status
+          </option>
+
+          <option value="pending">
+            Pending Review
+          </option>
+
+          <option value="shortlisted">
+            Shortlisted
+          </option>
+
+          <option value="rejected">
+            Rejected
+          </option>
+
+        </select>
+
+
+      </div>
+
+
+
+      <!-- =========================
+           RESUME SECTION
+      ========================= -->
+
+      <section class="resume-section">
+
+
+        <div class="section-heading">
+
+          <h2>
+            Candidate Resumes
+          </h2>
+
+          <span id="resumeCount">
+            0 resumes
+          </span>
+
+        </div>
+
+
+
+        <div
+          id="candidateList"
+          class="candidate-list"
+        >
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+              📄
+            </div>
+
+            <h3>
+              No Resumes Available
+            </h3>
+
+            <p>
+              Candidate resumes will appear here
+              once applications are submitted.
+            </p>
+
+          </div>
+
+        </div>
+
+
+      </section>
+
+
+    </main>
+
+
+  </div>
+
+
+
+  <!-- Resume Screening JavaScript -->
+
+  <script src="C:\Users\Admin\Desktop\Frontend\Js\HR\resumes.js"></script>
+
+
+</body>
+
+</html>

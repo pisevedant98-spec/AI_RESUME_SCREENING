@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Applications - Candidate Portal</title>
+  <link rel="stylesheet" href="../css/Candidate/candidate-application.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Profile-matching Sidebar -->
+    <aside class="sidebar">
+      <h2 class="portal-title">Candidate Portal</h2>
+      <nav class="sidebar-nav">
+        <a href="candidate-dashboard.html" class="nav-item">
+          <span class="nav-icon">🏚️</span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">My Profile</span>
+        </a>
+        <a href="candidate-job.html" class="nav-item">
+          <span class="nav-icon">💼</span>
+          <span class="nav-text">Browse Jobs</span>
+        </a>
+        <a href="candidate-application.html" class="nav-item active">
+          <span class="nav-icon">📄</span>
+          <span class="nav-text">My Applications</span>
+        </a>
+        <a href="candidate-resume.html" class="nav-item">
+          <span class="nav-icon">📑</span>
+          <span class="nav-text">My Resume</span>
+        </a>
+        <a href="candidate-skill-gap.html" class="nav-item">
+          <span class="nav-icon">🧩</span>
+          <span class="nav-text">Skill Gap Analysis</span>
+        </a>
+        <a href="candidate-interviews.html" class="nav-item">
+          <span class="nav-icon">🗓️</span>
+          <span class="nav-text">My Interviews</span>
+        </a>
+        <a href="candidate-notifications.html" class="nav-item">
+          <span class="nav-icon">🔔</span>
+          <span class="nav-text">Notifications</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="candidate-login.html" class="logout-btn">
+          <span class="logout-icon">🚪</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="content-header">
+        <h1 class="page-title">My Applications</h1>
+        <p class="page-subtitle">Track the real-time AI screening status and progress of your job applications.</p>
+      </header>
+
+      <!-- Status Overview Metrics -->
+      <section class="metrics-grid">
+        <div class="metric-card">
+          <span class="metric-number">3</span>
+          <span class="metric-label">Total Applied</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-number text-teal">1</span>
+          <span class="metric-label">Shortlisted</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-number text-blue">1</span>
+          <span class="metric-label">Under Review</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-number text-yellow">1</span>
+          <span class="metric-label">Interview Stage</span>
+        </div>
+      </section>
+
+      <!-- Application Card 1 -->
+      <section class="section-card app-card">
+        <div class="card-top-row">
+          <div>
+            <div class="badge-wrapper">
+              <span class="pill-badge">Engineering</span>
+              <span class="status-badge status-shortlisted">Shortlisted</span>
+            </div>
+            <h3 class="job-heading">AI / ML Intern</h3>
+            <p class="job-sub">Applied on: 12 August 2026 • Ref ID: #APP-2026-081</p>
+          </div>
+          <div class="match-badge">
+            <span class="match-num">94%</span>
+            <span class="match-lbl">Match Score</span>
+          </div>
+        </div>
+
+        <!-- Stepper Progress -->
+        <div class="stepper-container">
+          <div class="step completed">
+            <div class="step-circle">✓</div>
+            <span class="step-label">Applied</span>
+          </div>
+          <div class="step-line completed"></div>
+          <div class="step completed">
+            <div class="step-circle">✓</div>
+            <span class="step-label">AI Screened</span>
+          </div>
+          <div class="step-line completed"></div>
+          <div class="step active">
+            <div class="step-circle">3</div>
+            <span class="step-label">Shortlisted</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step">
+            <div class="step-circle">4</div>
+            <span class="step-label">Interview</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step">
+            <div class="step-circle">5</div>
+            <span class="step-label">Decision</span>
+          </div>
+        </div>
+
+        <div class="card-bottom-row">
+          <span class="status-note">Next Step: Technical interview round scheduled.</span>
+          <div class="btn-group">
+            <a href="candidate-interviews.html" class="btn-primary">View Interview</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Application Card 2 -->
+      <section class="section-card app-card">
+        <div class="card-top-row">
+          <div>
+            <div class="badge-wrapper">
+              <span class="pill-badge">Development</span>
+              <span class="status-badge status-review">Under Review</span>
+            </div>
+            <h3 class="job-heading">Python Backend Developer</h3>
+            <p class="job-sub">Applied on: 15 August 2026 • Ref ID: #APP-2026-094</p>
+          </div>
+          <div class="match-badge">
+            <span class="match-num">82%</span>
+            <span class="match-lbl">Match Score</span>
+          </div>
+        </div>
+
+        <!-- Stepper Progress -->
+        <div class="stepper-container">
+          <div class="step completed">
+            <div class="step-circle">✓</div>
+            <span class="step-label">Applied</span>
+          </div>
+          <div class="step-line completed"></div>
+          <div class="step active">
+            <div class="step-circle">2</div>
+            <span class="step-label">AI Screened</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step">
+            <div class="step-circle">3</div>
+            <span class="step-label">Shortlisted</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step">
+            <div class="step-circle">4</div>
+            <span class="step-label">Interview</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step">
+            <div class="step-circle">5</div>
+            <span class="step-label">Decision</span>
+          </div>
+        </div>
+
+        <div class="card-bottom-row">
+          <span class="status-note">Status: AI Resume screening completed. Waiting for HR review.</span>
+          <div class="btn-group">
+            <a href="candidate-skill-gap.html" class="btn-secondary">Check Skill Gap</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Application Card 3 -->
+      <section class="section-card app-card">
+        <div class="card-top-row">
+          <div>
+            <div class="badge-wrapper">
+              <span class="pill-badge">Analytics</span>
+              <span class="status-badge status-applied">Applied</span>
+            </div>
+            <h3 class="job-heading">Data Analyst Intern</h3>
+            <p class="job-sub">Applied on: 18 August 2026 • Ref ID: #APP-2026-102</p>
+          </div>
+          <div class="match-badge">
+            <span class="match-num">76%</span>
+            <span class="match-lbl">Match Score</span>
+          </div>
+        </div>
+
+        <!-- Stepper Progress -->
+        <div class="stepper-container">
+          <div class="step active">
+            <div class="step-circle">1</div>
+            <span class="step-label">Applied</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step">
+            <div class="step-circle">2</div>
+            <span class="step-label">AI Screened</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step">
+            <div class="step-circle">3</div>
+            <span class="step-label">Shortlisted</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step">
+            <div class="step-circle">4</div>
+            <span class="step-label">Interview</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step">
+            <div class="step-circle">5</div>
+            <span class="step-label">Decision</span>
+          </div>
+        </div>
+
+        <div class="card-bottom-row">
+          <span class="status-note">Status: Resume uploaded. Pending automated parsing.</span>
+          <div class="btn-group">
+            <button class="btn-danger-outline" onclick="alert('Application withdrawn.')">Withdraw</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/Candidate-js/candidate-application.js"></script>
+</body>
+</html>

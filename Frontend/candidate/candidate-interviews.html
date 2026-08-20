@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Interviews - Candidate Portal</title>
+  <link rel="stylesheet" href="../css/Candidate/candidate-interviews.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2 class="portal-title">Candidate Portal</h2>
+      <nav class="sidebar-nav">
+        <a href="candidate-dashboard.html" class="nav-item">
+          <span class="nav-icon">🏚️</span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">My Profile</span>
+        </a>
+        <a href="candidate-job.html" class="nav-item">
+          <span class="nav-icon">💼</span>
+          <span class="nav-text">Browse Jobs</span>
+        </a>
+        <a href="candidate-application.html" class="nav-item">
+          <span class="nav-icon">📄</span>
+          <span class="nav-text">My Applications</span>
+        </a>
+        <a href="candidate-resume.html" class="nav-item">
+          <span class="nav-icon">📑</span>
+          <span class="nav-text">My Resume</span>
+        </a>
+        <a href="candidate-skill-gap.html" class="nav-item">
+          <span class="nav-icon">🧩</span>
+          <span class="nav-text">Skill Gap Analysis</span>
+        </a>
+        <a href="candidate-interviews.html" class="nav-item active">
+          <span class="nav-icon">🗓️</span>
+          <span class="nav-text">My Interviews</span>
+        </a>
+        <a href="candidate-notifications.html" class="nav-item">
+          <span class="nav-icon">🔔</span>
+          <span class="nav-text">Notifications</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="candidate-login.html" class="logout-btn">
+          <span class="logout-icon">🚪</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="content-header">
+        <h1 class="page-title">My Interviews</h1>
+        <p class="page-subtitle">Track your upcoming, scheduled, and past technical interview rounds.</p>
+      </header>
+
+      <!-- Dynamic Interviews List Container -->
+      <div id="interviewsContainer" class="interviews-wrapper">
+        <section class="section-card interview-card">
+          <div class="card-top-row">
+            <div>
+              <span class="status-badge status-scheduled">Scheduled</span>
+              <h3 class="job-heading">AI / ML Intern - Technical Round</h3>
+              <p class="job-sub">Mode: Online Google Meet / Zoom</p>
+            </div>
+            <div class="date-badge">
+              <span class="date-num">25</span>
+              <span class="date-month">AUG 2026</span>
+            </div>
+          </div>
+
+          <div class="interview-details-grid">
+            <div class="detail-item">
+              <span class="detail-label">⏰ Time</span>
+              <span class="detail-val">11:30 AM – 12:15 PM IST</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">👤 Interviewer</span>
+              <span class="detail-val">AI Team Lead</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">📋 Format</span>
+              <span class="detail-val">Coding & AI Fundamentals</span>
+            </div>
+          </div>
+
+          <div class="instructions-box">
+            <h4>Instructions:</h4>
+            <p>Please join 5 minutes early with your camera enabled and keep your code editor / IDE ready for live problem solving.</p>
+          </div>
+
+          <div class="card-bottom-row">
+            <span class="exp-info">Meeting link will activate 15 mins prior to interview.</span>
+            <div class="btn-group">
+              <button class="btn-primary" id="joinMeetingBtn">Join Meeting</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/Candidate-js/candidate-interviews.js"></script>
+</body>
+</html>

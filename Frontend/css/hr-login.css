@@ -1,0 +1,340 @@
+/* =========================
+   HR LOGIN PAGE
+   ========================= */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #2c3e50, #4ca1af);
+    color: #fff;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+}
+
+
+/* =========================
+   LOGIN CARD
+   ========================= */
+
+.login-card {
+    background: rgba(255, 255, 255, 0.08);
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 16px 40px rgba(0, 0, 0, 0.2);
+
+    padding: 36px 32px;
+
+    width: 340px;
+
+    backdrop-filter: blur(12px);
+}
+
+
+.login-card h1 {
+    margin-top: 0;
+    margin-bottom: 24px;
+
+    font-size: 26px;
+    letter-spacing: 0.5px;
+
+    text-align: center;
+}
+
+
+.login-card label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+
+    color: #e4eef2;
+}
+
+
+/* =========================
+   INPUTS
+   ========================= */
+
+.login-card input[type="text"],
+.login-card input[type="password"] {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.1);
+
+    color: #fff;
+
+    font-size: 15px;
+
+    box-sizing: border-box;
+}
+
+
+.login-card input:focus {
+    outline: none;
+
+    border-color: rgba(255, 255, 255, 0.7);
+
+    box-shadow:
+        0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================
+   LOGIN OPTIONS
+   ========================= */
+
+.login-options {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: -6px;
+    margin-bottom: 20px;
+
+    font-size: 13px;
+}
+
+
+.remember-me {
+    display: flex !important;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin: 0 !important;
+
+    color: #e4eef2;
+
+    cursor: pointer;
+}
+
+
+.remember-me input {
+    width: auto;
+
+    margin: 0;
+
+    accent-color: #1abc9c;
+
+    cursor: pointer;
+}
+
+
+.forgot-password {
+    color: #ffffff;
+
+    text-decoration: none;
+
+    transition: color 0.2s ease;
+
+    cursor: pointer;
+}
+
+
+.forgot-password:hover {
+    color: #1abc9c;
+
+    text-decoration: underline;
+}
+
+
+/* =========================
+   SIGN IN BUTTON
+   ========================= */
+
+.login-card button {
+    width: 100%;
+
+    padding: 12px 16px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #1abc9c;
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+
+.login-card button:hover {
+    background: #16a085;
+}
+
+
+/* =========================
+   HELP TEXT
+   ========================= */
+
+.login-card .help {
+    margin-top: 14px;
+
+    font-size: 13px;
+
+    text-align: center;
+
+    color: rgba(255, 255, 255, 0.75);
+}
+
+
+/* =========================
+   FORGOT PASSWORD POPUP
+   ========================= */
+
+.popup-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    z-index: 1000;
+}
+
+
+.popup-overlay.show {
+    display: flex;
+}
+
+
+.popup-box {
+    position: relative;
+
+    width: 90%;
+
+    max-width: 380px;
+
+    padding: 30px;
+
+    background: #ffffff;
+
+    color: #333;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.3);
+
+    box-sizing: border-box;
+}
+
+
+.popup-box h2 {
+    margin-top: 0;
+
+    margin-bottom: 10px;
+
+    color: #333;
+}
+
+
+.popup-box p {
+    color: #666;
+
+    font-size: 14px;
+}
+
+
+.popup-box input {
+    width: 100%;
+
+    padding: 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #ccc;
+
+    border-radius: 8px;
+
+    margin: 10px 0 15px;
+
+    font-size: 14px;
+}
+
+
+.popup-box input:focus {
+    outline: none;
+
+    border-color: #1abc9c;
+}
+
+
+.popup-box #sendReset {
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #1abc9c;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+
+.popup-box #sendReset:hover {
+    background: #16a085;
+}
+
+
+/* =========================
+   CLOSE BUTTON
+   ========================= */
+
+.close-popup {
+    position: absolute;
+
+    top: 8px;
+    right: 12px;
+
+    border: none !important;
+
+    background: transparent !important;
+
+    color: #555 !important;
+
+    font-size: 25px !important;
+
+    cursor: pointer;
+
+    width: auto !important;
+
+    padding: 0 !important;
+}
+
+
+.close-popup:hover {
+    color: #1abc9c !important;
+}

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>HR Dashboard</title>
+
+  <link rel="stylesheet" href="../css/HR/hr-dashboard.css">
+</head>
+
+<body>
+
+  <div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <h2>HR Portal</h2>
+
+      <nav>
+        <a href="hr-dashboard.html" class="active">🏠 Dashboard</a>
+        <a href="jobs.html">💼 Job Management</a>
+        <a href="resumes.html">📄 Resume Screening</a>
+        <a href="shortlisting.html">🤖 AI Shortlisting</a>
+        <a href="skill-gap.html">🧩 Skill Gap Analysis</a>
+        <a href="interviews.html">📅 Interview Management</a>
+      </nav>
+
+      <a href="../hr-login.html" class="logout">
+        🚪 Logout
+      </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- HEADER -->
+      <header class="dashboard-header">
+        <div>
+          <h1>HR Dashboard</h1>
+          <p>Welcome to the HR recruitment dashboard.</p>
+        </div>
+      </header>
+
+
+      <!-- STAT CARDS -->
+      <section class="stats-grid">
+
+        <div class="stat-card">
+          <div class="stat-icon">💼</div>
+          <div>
+            <span>Active Jobs</span>
+            <strong id="activeJobs">0</strong>
+            <small>Currently open positions</small>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div>
+            <span>Total Applications</span>
+            <strong id="totalApplications">0</strong>
+            <small>Applications received</small>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🤖</div>
+          <div>
+            <span>Shortlisted</span>
+            <strong id="shortlistedCount">0</strong>
+            <small>Candidates shortlisted</small>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div>
+            <span>Interviews</span>
+            <strong id="interviewCount">0</strong>
+            <small>Scheduled interviews</small>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- QUICK ACTIONS -->
+      <section class="dashboard-section">
+
+        <div class="section-header">
+          <div>
+            <h2>Quick Actions</h2>
+            <p>Frequently used recruitment tools</p>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+
+          <a href="jobs.html" class="action-card">
+            <div class="action-icon">💼</div>
+            <h3>Manage Jobs</h3>
+            <p>Create and manage job openings</p>
+          </a>
+
+          <a href="resumes.html" class="action-card">
+            <div class="action-icon">📄</div>
+            <h3>Screen Resumes</h3>
+            <p>Review candidate resumes</p>
+          </a>
+
+          <a href="shortlisting.html" class="action-card">
+            <div class="action-icon">🤖</div>
+            <h3>AI Shortlisting</h3>
+            <p>Evaluate candidate matches</p>
+          </a>
+
+          <a href="interviews.html" class="action-card">
+            <div class="action-icon">📅</div>
+            <h3>Manage Interviews</h3>
+            <p>Schedule candidate interviews</p>
+          </a>
+
+        </div>
+
+      </section>
+
+
+      <!-- RECENT INFORMATION -->
+      <section class="content-grid">
+
+        <!-- RECENT JOBS -->
+        <div class="dashboard-panel">
+
+          <div class="panel-header">
+            <div>
+              <h2>Recent Job Openings</h2>
+              <p>Latest recruitment positions</p>
+            </div>
+
+            <a href="jobs.html">View All</a>
+          </div>
+
+          <div id="recentJobs" class="panel-content">
+
+            <div class="empty-state">
+              <div class="empty-icon">💼</div>
+              <h3>No Job Openings</h3>
+              <p>
+                Job openings created through Job Management
+                will appear here.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- RECENT APPLICATIONS -->
+        <div class="dashboard-panel">
+
+          <div class="panel-header">
+            <div>
+              <h2>Recent Applications</h2>
+              <p>Latest candidate activity</p>
+            </div>
+
+            <a href="resumes.html">View All</a>
+          </div>
+
+          <div id="recentApplications" class="panel-content">
+
+            <div class="empty-state">
+              <div class="empty-icon">👥</div>
+              <h3>No Applications</h3>
+              <p>
+                Candidate applications will appear here
+                when they are available.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- UPCOMING INTERVIEWS -->
+        <div class="dashboard-panel">
+
+          <div class="panel-header">
+            <div>
+              <h2>Upcoming Interviews</h2>
+              <p>Scheduled candidate interviews</p>
+            </div>
+
+            <a href="interviews.html">View All</a>
+          </div>
+
+          <div id="upcomingInterviews" class="panel-content">
+
+            <div class="empty-state">
+              <div class="empty-icon">📅</div>
+              <h3>No Upcoming Interviews</h3>
+              <p>
+                Scheduled interviews will appear here.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- AI OVERVIEW -->
+      <section class="dashboard-section">
+
+        <div class="section-header">
+          <div>
+            <h2>AI Recruitment Overview</h2>
+            <p>AI-powered recruitment activities</p>
+          </div>
+        </div>
+
+        <div class="ai-overview">
+
+          <a href="shortlisting.html" class="ai-card">
+            <div class="ai-icon">🤖</div>
+
+            <div>
+              <h3>AI Shortlisting</h3>
+              <p>Candidate matching and ranking</p>
+            </div>
+
+            <span class="open-link">Open →</span>
+          </a>
+
+
+          <a href="skill-gap.html" class="ai-card">
+            <div class="ai-icon">🧩</div>
+
+            <div>
+              <h3>Skill Gap Analysis</h3>
+              <p>Compare candidate skills</p>
+            </div>
+
+            <span class="open-link">Open →</span>
+          </a>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- DASHBOARD JS -->
+  <script src="../Js/HR/hr-dashboard.js"></script>
+
+</body>
+</html>

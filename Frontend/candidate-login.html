@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Candidate Login</title>
+
+    <link rel="stylesheet" href="css/candidate-login.css">
+
+</head>
+
+<body>
+
+    <!-- CANDIDATE LOGIN -->
+
+    <main class="login-container">
+
+        <div class="login-header">
+
+            <h1>Candidate Login</h1>
+
+            <p>
+                Access your application dashboard
+            </p>
+
+        </div>
+
+
+        <form id="candidateLoginForm">
+
+            <div class="form-group">
+
+                <label for="candidate-email">
+                    Email address
+                </label>
+
+                <input
+                    id="candidate-email"
+                    type="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="candidate-password">
+                    Password
+                </label>
+
+                <input
+                    id="candidate-password"
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+            </div>
+
+
+            <div class="actions">
+
+                <label>
+
+                    <input
+                        type="checkbox"
+                        name="remember"
+                    >
+
+                    Remember me
+
+                </label>
+
+
+                <a
+                    href="#"
+                    class="forgot-password"
+                    id="forgotPassword"
+                >
+                    Forgot password?
+                </a>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="button-submit"
+            >
+                Sign In
+            </button>
+
+        </form>
+
+
+        <p class="footer-note">
+
+            New candidate? Contact HR or register through
+            the onboarding portal.
+
+        </p>
+
+    </main>
+
+
+    <!-- FORGOT PASSWORD POPUP -->
+
+    <div
+        class="popup-overlay"
+        id="forgotPopup"
+    >
+
+        <div class="popup-box">
+
+            <button
+                type="button"
+                class="close-popup"
+                id="closePopup"
+            >
+                &times;
+            </button>
+
+
+            <h2>
+                Forgot Password?
+            </h2>
+
+
+            <p>
+                Enter your registered email address.
+            </p>
+
+
+            <input
+                type="email"
+                id="forgotEmail"
+                placeholder="Enter your email"
+            >
+
+
+            <button
+                type="button"
+                id="sendReset"
+            >
+                Submit
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script src="js/candidate-login.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,285 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f0f4f8;
+  color: #1e293b;
+}
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Matching Profile */
+.sidebar {
+  width: 260px;
+  background-color: #0d141e;
+  color: #94a3b8;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.portal-title {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 28px;
+  padding-left: 8px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #94a3b8;
+  text-decoration: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-item .nav-icon {
+  font-size: 16px;
+}
+
+.nav-item:hover {
+  color: #ffffff;
+  background-color: #16202e;
+}
+
+/* Active Highlight Matching Profile */
+.nav-item.active {
+  background-color: #00b894;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding-top: 16px;
+  border-top: 1px solid #16202e;
+  margin-top: auto;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ff6b6b;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 107, 107, 0.1);
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  padding: 36px 48px;
+  max-width: 1200px;
+}
+
+.content-header {
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.page-subtitle {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* White Profile Container Style */
+.profile-card,
+.section-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  margin-bottom: 22px;
+  border: 1px solid #edf2f7;
+}
+
+/* Search Box Styled as Profile Container */
+.search-box-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.search-icon {
+  font-size: 16px;
+  color: #64748b;
+}
+
+.search-box-wrapper input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.search-box-wrapper input::placeholder {
+  color: #94a3b8;
+}
+
+/* Job Card Details */
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.pill-badge {
+  background: #e0f2fe;
+  color: #0284c7;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+.job-heading {
+  font-size: 19px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.job-sub {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.match-badge {
+  background: #e6fcf5;
+  border: 1px solid #c3fae8;
+  padding: 6px 14px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.match-num {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #00b894;
+}
+
+.match-lbl {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #00b894;
+  font-weight: 600;
+}
+
+.job-desc {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tag-pill {
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 8px;
+}
+
+.card-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 16px;
+}
+
+.exp-info {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* Matching Profile Green Buttons */
+.btn-primary {
+  background-color: #00b894;
+  color: #ffffff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-secondary:hover {
+  background-color: #f8fafc;
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HR Login</title>
+
+    <link rel="stylesheet" href="css/hr-login.css">
+</head>
+
+<body>
+
+    <!-- HR LOGIN -->
+
+    <div class="login-card">
+
+        <h1>HR Login</h1>
+
+        <form id="hrLoginForm">
+
+            <label for="username">Username</label>
+
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter your username"
+                required
+            >
+
+            <label for="password">Password</label>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <div class="login-options">
+
+                <label class="remember-me">
+                    <input
+                        type="checkbox"
+                        name="remember"
+                    >
+                    Remember me
+                </label>
+
+                <a
+                    href="#"
+                    class="forgot-password"
+                    id="forgotPassword"
+                >
+                    Forgot password?
+                </a>
+
+            </div>
+
+            <button type="submit">
+                Sign In
+            </button>
+
+        </form>
+
+        <p class="help">
+            Only authorized HR personnel may access this portal.
+        </p>
+
+    </div>
+
+
+    <!-- FORGOT PASSWORD POPUP -->
+
+    <div
+        class="popup-overlay"
+        id="forgotPopup"
+    >
+
+        <div class="popup-box">
+
+            <button
+                type="button"
+                class="close-popup"
+                id="closePopup"
+            >
+                &times;
+            </button>
+
+            <h2>Forgot Password?</h2>
+
+            <p>
+                Enter your registered email address.
+            </p>
+
+            <input
+                type="email"
+                id="forgotEmail"
+                placeholder="Enter your email"
+            >
+
+            <button
+                type="button"
+                id="sendReset"
+            >
+                Submit
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script src="js/hr-login.js"></script>
+
+</body>
+
+</html>

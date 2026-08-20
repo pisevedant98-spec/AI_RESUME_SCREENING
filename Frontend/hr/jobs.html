@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Job Management</title>
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="../css/HR/jobs.css">
+</head>
+
+<body>
+
+  <div class="dashboard">
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="sidebar">
+
+      <h2>HR Portal</h2>
+
+      <nav>
+
+        <a href="hr-dashboard.html">
+          🏠 Dashboard
+        </a>
+
+        <a href="jobs.html" class="active">
+          💼 Job Management
+        </a>
+
+        <a href="resumes.html">
+          📄 Resume Screening
+        </a>
+
+        <a href="shortlisting.html">
+          🤖 AI Shortlisting
+        </a>
+
+        <a href="skill-gap.html">
+          🧩 Skill Gap Analysis
+        </a>
+
+        <a href="interviews.html">
+          📅 Interview Management
+        </a>
+
+      </nav>
+
+      <a href="../hr-login.html" class="logout">
+        🚪 Logout
+      </a>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <main class="main-content">
+
+      <div class="page-title">
+
+        <div>
+
+          <h1>
+            Job Management
+          </h1>
+
+          <p>
+            Create, manage and monitor job openings.
+          </p>
+
+        </div>
+
+        <button
+          class="primary-btn"
+          id="createJobBtn"
+          type="button"
+        >
+          + Create New Job
+        </button>
+
+      </div>
+
+
+      <!-- =========================
+           SUMMARY CARDS
+      ========================= -->
+
+      <div class="job-summary">
+
+        <div class="summary-card">
+
+          <span>
+            Active Jobs
+          </span>
+
+          <strong id="activeJobCount">
+            0
+          </strong>
+
+          <small>
+            Currently open positions
+          </small>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <span>
+            Closed Jobs
+          </span>
+
+          <strong id="closedJobCount">
+            0
+          </strong>
+
+          <small>
+            Positions no longer active
+          </small>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <span>
+            Total Jobs
+          </span>
+
+          <strong id="totalJobCount">
+            0
+          </strong>
+
+          <small>
+            All job openings
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           SEARCH & FILTER
+      ========================= -->
+
+      <div class="job-tools">
+
+        <input
+          type="text"
+          id="jobSearch"
+          placeholder="🔍 Search jobs..."
+        >
+
+        <select id="jobStatus">
+
+          <option value="all">
+            All Status
+          </option>
+
+          <option value="open">
+            Open
+          </option>
+
+          <option value="closed">
+            Closed
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- =========================
+           JOB OPENINGS
+      ========================= -->
+
+      <section class="jobs-section">
+
+        <div class="section-heading">
+
+          <h2>
+            Job Openings
+          </h2>
+
+          <span id="jobCount">
+            No jobs available
+          </span>
+
+        </div>
+
+
+        <div
+          id="jobList"
+          class="job-list"
+        >
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+              💼
+            </div>
+
+            <h3>
+              No Job Openings Yet
+            </h3>
+
+            <p>
+              Create your first job opening to start receiving candidates.
+            </p>
+
+            <button
+              class="primary-btn"
+              id="emptyCreateBtn"
+              type="button"
+            >
+              + Create New Job
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- =========================
+       CREATE JOB MODAL
+  ========================= -->
+
+  <div
+    class="job-modal"
+    id="jobModal"
+  >
+
+    <div class="job-modal-box">
+
+      <button
+        type="button"
+        class="close-modal"
+        id="closeJobModal"
+      >
+        &times;
+      </button>
+
+      <h2>
+        Create New Job
+      </h2>
+
+      <p class="modal-subtitle">
+        Enter the details for the new job opening.
+      </p>
+
+
+      <form id="createJobForm">
+
+        <div class="form-row">
+
+          <div class="form-group">
+
+            <label for="jobTitle">
+              Job Title
+            </label>
+
+            <input
+              type="text"
+              id="jobTitle"
+              placeholder="e.g. Software Developer"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="jobLocation">
+              Location
+            </label>
+
+            <input
+              type="text"
+              id="jobLocation"
+              placeholder="e.g. Delhi / Remote"
+              required
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="jobDescription">
+            Job Description
+          </label>
+
+          <textarea
+            id="jobDescription"
+            rows="4"
+            placeholder="Describe the job role and responsibilities..."
+            required
+          ></textarea>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="jobSkills">
+            Required Skills
+          </label>
+
+          <input
+            type="text"
+            id="jobSkills"
+            placeholder="e.g. Python, SQL, JavaScript"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-row">
+
+          <div class="form-group">
+
+            <label for="jobExperience">
+              Experience
+            </label>
+
+            <select
+              id="jobExperience"
+              required
+            >
+
+              <option value="">
+                Select experience
+              </option>
+
+              <option value="0-1 Years">
+                0–1 Years
+              </option>
+
+              <option value="1-3 Years">
+                1–3 Years
+              </option>
+
+              <option value="3-5 Years">
+                3–5 Years
+              </option>
+
+              <option value="5+ Years">
+                5+ Years
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="jobEducation">
+              Education
+            </label>
+
+            <input
+              type="text"
+              id="jobEducation"
+              placeholder="e.g. B.Tech / BCA"
+              required
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="form-row">
+
+          <div class="form-group">
+
+            <label for="jobType">
+              Employment Type
+            </label>
+
+            <select
+              id="jobType"
+              required
+            >
+
+              <option value="">
+                Select type
+              </option>
+
+              <option value="Full Time">
+                Full Time
+              </option>
+
+              <option value="Part Time">
+                Part Time
+              </option>
+
+              <option value="Internship">
+                Internship
+              </option>
+
+              <option value="Contract">
+                Contract
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="jobSalary">
+              Salary Range
+            </label>
+
+            <input
+              type="text"
+              id="jobSalary"
+              placeholder="e.g. ₹4–6 LPA"
+              required
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            type="button"
+            class="cancel-btn"
+            id="cancelJob"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="primary-btn"
+          >
+            Create Job
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- External JavaScript -->
+  <script src="C:\Users\Admin\Desktop\Frontend\Js\HR\jobs.js"></script>
+
+</body>
+
+</html>

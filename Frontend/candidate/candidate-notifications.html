@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications - Candidate Portal</title>
+  <link rel="stylesheet" href="../css/Candidate/candidate-notification.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2 class="portal-title">Candidate Portal</h2>
+      <nav class="sidebar-nav">
+        <a href="candidate-dashboard.html" class="nav-item">
+          <span class="nav-icon">🏚️</span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">My Profile</span>
+        </a>
+        <a href="candidate-job.html" class="nav-item">
+          <span class="nav-icon">💼</span>
+          <span class="nav-text">Browse Jobs</span>
+        </a>
+        <a href="candidate-application.html" class="nav-item">
+          <span class="nav-icon">📄</span>
+          <span class="nav-text">My Applications</span>
+        </a>
+        <a href="candidate-resume.html" class="nav-item">
+          <span class="nav-icon">📑</span>
+          <span class="nav-text">My Resume</span>
+        </a>
+        <a href="candidate-skill-gap.html" class="nav-item">
+          <span class="nav-icon">🧩</span>
+          <span class="nav-text">Skill Gap Analysis</span>
+        </a>
+        <a href="candidate-interviews.html" class="nav-item">
+          <span class="nav-icon">🗓️</span>
+          <span class="nav-text">My Interviews</span>
+        </a>
+        <a href="candidate-notifications.html" class="nav-item active">
+          <span class="nav-icon">🔔</span>
+          <span class="nav-text">Notifications</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="candidate-login.html" class="logout-btn">
+          <span class="logout-icon">🚪</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="content-header">
+        <div class="header-actions-row">
+          <div>
+            <h1 class="page-title">Notifications</h1>
+            <p class="page-subtitle">Real-time alerts regarding your resume screening, applications, and interviews.</p>
+          </div>
+          <button id="markAllReadBtn" class="btn-secondary">Mark All as Read</button>
+        </div>
+      </header>
+
+      <!-- Notifications List Container -->
+      <div id="notificationsContainer" class="notifications-list">
+        <!-- Notification 1 -->
+        <div class="notification-card unread">
+          <div class="notif-icon-box icon-success">🗓️</div>
+          <div class="notif-content">
+            <div class="notif-title-row">
+              <h4>Interview Scheduled</h4>
+              <span class="notif-time">2 hours ago</span>
+            </div>
+            <p>Your technical interview for <strong>AI / ML Intern</strong> has been scheduled for 25 Aug 2026 at 11:30 AM IST.</p>
+          </div>
+        </div>
+
+        <!-- Notification 2 -->
+        <div class="notification-card unread">
+          <div class="notif-icon-box icon-info">✨</div>
+          <div class="notif-content">
+            <div class="notif-title-row">
+              <h4>Resume Shortlisted by AI</h4>
+              <span class="notif-time">Yesterday</span>
+            </div>
+            <p>Great news! Your profile achieved a <strong>94% match score</strong> for the AI / ML Intern position and has been shortlisted by HR.</p>
+          </div>
+        </div>
+
+        <!-- Notification 3 -->
+        <div class="notification-card">
+          <div class="notif-icon-box icon-neutral">📄</div>
+          <div class="notif-content">
+            <div class="notif-title-row">
+              <h4>Application Submitted</h4>
+              <span class="notif-time">3 days ago</span>
+            </div>
+            <p>Your application for <strong>Python Backend Developer</strong> (#APP-2026-094) was received successfully.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/Candidate-js/candidate-notification.js"></script>
+</body>
+</html>

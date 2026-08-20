@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Jobs - Candidate Portal</title>
+  <link rel="stylesheet" href="../css/Candidate/candidate-job.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Profile-matching Sidebar -->
+    <aside class="sidebar">
+      <h2 class="portal-title">Candidate Portal</h2>
+      <nav class="sidebar-nav">
+        <a href="candidate-dashboard.html" class="nav-item">
+          <span class="nav-icon">🏚️</span>
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">My Profile</span>
+        </a>
+        <a href="candidate-job.html" class="nav-item active">
+          <span class="nav-icon">💼</span>
+          <span class="nav-text">Browse Jobs</span>
+        </a>
+        <a href="candidate-application.html" class="nav-item">
+          <span class="nav-icon">📄</span>
+          <span class="nav-text">My Applications</span>
+        </a>
+        <a href="candidate-resume.html" class="nav-item">
+          <span class="nav-icon">📑</span>
+          <span class="nav-text">My Resume</span>
+        </a>
+        <a href="candidate-skill-gap.html" class="nav-item">
+          <span class="nav-icon">🧩</span>
+          <span class="nav-text">Skill Gap Analysis</span>
+        </a>
+        <a href="candidate-interviews.html" class="nav-item">
+          <span class="nav-icon">🗓️</span>
+          <span class="nav-text">My Interviews</span>
+        </a>
+        <a href="candidate-notifications.html" class="nav-item">
+          <span class="nav-icon">🔔</span>
+          <span class="nav-text">Notifications</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="candidate-login.html" class="logout-btn">
+          <span class="logout-icon">🚪</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content Matching Profile Page -->
+    <main class="main-content">
+      <header class="content-header">
+        <h1 class="page-title">Browse Jobs</h1>
+        <p class="page-subtitle">Explore open positions and apply directly based on your skills.</p>
+      </header>
+
+      <!-- Profile Style Header Card (Search & Stats) -->
+      <section class="profile-card search-card-top">
+        <div class="search-box-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="jobSearchInput" placeholder="Search jobs by title, skills, or department..." autocomplete="off">
+        </div>
+      </section>
+
+      <!-- Section Card 1: Job Opening -->
+      <section class="section-card job-item-card">
+        <div class="card-top-row">
+          <div>
+            <span class="pill-badge">Full-Time</span>
+            <h3 class="job-heading">AI / ML Intern</h3>
+            <p class="job-sub">📍 Department: Artificial Intelligence</p>
+          </div>
+          <div class="match-badge">
+            <span class="match-num">94%</span>
+            <span class="match-lbl">AI Match</span>
+          </div>
+        </div>
+
+        <p class="job-desc">
+          Looking for an enthusiastic AI/ML intern with hands-on knowledge in Python, Scikit-learn, and NLP models.
+        </p>
+
+        <div class="tags-row">
+          <span class="tag-pill">Python</span>
+          <span class="tag-pill">Machine Learning</span>
+          <span class="tag-pill">NLP</span>
+          <span class="tag-pill">SQL</span>
+        </div>
+
+        <div class="card-bottom-row">
+          <span class="exp-info">Experience: 0–1 Years</span>
+          <div class="btn-group">
+            <a href="candidate-skill-gap.html" class="btn-secondary">Check Match</a>
+            <button class="btn-primary apply-btn" data-title="AI / ML Intern">Apply Now</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section Card 2: Job Opening -->
+      <section class="section-card job-item-card">
+        <div class="card-top-row">
+          <div>
+            <span class="pill-badge">Full-Time</span>
+            <h3 class="job-heading">Python Backend Developer</h3>
+            <p class="job-sub">📍 Department: Engineering</p>
+          </div>
+          <div class="match-badge">
+            <span class="match-num">82%</span>
+            <span class="match-lbl">AI Match</span>
+          </div>
+        </div>
+
+        <p class="job-desc">
+          Responsible for building scalable REST APIs, managing database schemas, and integrating AI microservices.
+        </p>
+
+        <div class="tags-row">
+          <span class="tag-pill">Python</span>
+          <span class="tag-pill">Flask</span>
+          <span class="tag-pill">FastAPI</span>
+          <span class="tag-pill">MySQL</span>
+        </div>
+
+        <div class="card-bottom-row">
+          <span class="exp-info">Experience: 0–2 Years</span>
+          <div class="btn-group">
+            <a href="candidate-skill-gap.html" class="btn-secondary">Check Match</a>
+            <button class="btn-primary apply-btn" data-title="Python Backend Developer">Apply Now</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section Card 3: Job Opening -->
+      <section class="section-card job-item-card">
+        <div class="card-top-row">
+          <div>
+            <span class="pill-badge">Internship</span>
+            <h3 class="job-heading">Data Analyst Intern</h3>
+            <p class="job-sub">📍 Department: Analytics</p>
+          </div>
+          <div class="match-badge">
+            <span class="match-num">76%</span>
+            <span class="match-lbl">AI Match</span>
+          </div>
+        </div>
+
+        <p class="job-desc">
+          Assist the data team with data cleaning, exploratory data analysis, visualization reports, and SQL querying.
+        </p>
+
+        <div class="tags-row">
+          <span class="tag-pill">Pandas</span>
+          <span class="tag-pill">SQL</span>
+          <span class="tag-pill">Power BI</span>
+          <span class="tag-pill">Excel</span>
+        </div>
+
+        <div class="card-bottom-row">
+          <span class="exp-info">Experience: 0–1 Years</span>
+          <div class="btn-group">
+            <a href="candidate-skill-gap.html" class="btn-secondary">Check Match</a>
+            <button class="btn-primary apply-btn" data-title="Data Analyst Intern">Apply Now</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/Candidate-js/candidate-job.js"></script>
+</body>
+</html>

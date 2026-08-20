@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI Shortlisting</title>
+
+  <link rel="stylesheet" href="../css/HR/shortlisting.css">
+</head>
+
+<body>
+
+  <div class="dashboard">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+      <h2>HR Portal</h2>
+
+      <nav>
+
+        <a href="hr-dashboard.html">
+          🏠 Dashboard
+        </a>
+
+        <a href="jobs.html">
+          💼 Job Management
+        </a>
+
+        <a href="resumes.html">
+          📄 Resume Screening
+        </a>
+
+        <a href="shortlisting.html" class="active">
+          🤖 AI Shortlisting
+        </a>
+
+        <a href="skill-gap.html">
+          🧩 Skill Gap Analysis
+        </a>
+
+        <a href="interviews.html">
+          📅 Interview Management
+        </a>
+
+      </nav>
+
+      <a href="../hr-login.html" class="logout">
+        🚪 Logout
+      </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+      <div class="page-title">
+
+        <h1>AI Shortlisting</h1>
+
+        <p>
+          Use AI to evaluate candidate resumes against job requirements.
+        </p>
+
+      </div>
+
+
+      <!-- JOB SELECTION -->
+
+      <section class="ai-controls">
+
+        <label for="jobSelect">
+          Select Job
+        </label>
+
+        <div class="control-row">
+
+          <select id="jobSelect">
+
+            <option value="">
+              Select a job opening
+            </option>
+
+          </select>
+
+          <button
+            type="button"
+            class="primary-btn"
+            id="runAiBtn"
+          >
+            🤖 Run AI Shortlisting
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- SUMMARY -->
+
+      <div class="ai-summary">
+
+        <div class="summary-card">
+
+          <span>Candidates Evaluated</span>
+
+          <strong id="evaluatedCount">
+            0
+          </strong>
+
+          <small>
+            Resumes analyzed by AI
+          </small>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <span>Strong Matches</span>
+
+          <strong id="strongMatchCount">
+            0
+          </strong>
+
+          <small>
+            AI match score 80% or above
+          </small>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <span>Shortlisted</span>
+
+          <strong id="shortlistedCount">
+            0
+          </strong>
+
+          <small>
+            Candidates selected by HR
+          </small>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <span>Rejected</span>
+
+          <strong id="rejectedCount">
+            0
+          </strong>
+
+          <small>
+            Candidates rejected by HR
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- RESULTS -->
+
+      <section class="results-section">
+
+        <div class="section-heading">
+
+          <h2>
+            AI Shortlisting Results
+          </h2>
+
+          <span id="resultCount">
+            0 candidates
+          </span>
+
+        </div>
+
+
+        <div id="candidateList" class="candidate-list">
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+              🤖
+            </div>
+
+            <h3>
+              No AI Results Available
+            </h3>
+
+            <p>
+              Select a job and run AI shortlisting after
+              candidate applications and resumes are available.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- SHORTLISTING JS -->
+
+  <script src="C:\Users\Admin\Desktop\Frontend\Js\HR\shortlisting.js"></script>
+
+</body>
+
+</html>

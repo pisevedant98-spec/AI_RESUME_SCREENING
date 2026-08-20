@@ -1,0 +1,158 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #1f2937;
+}
+
+.role-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.role-card {
+    width: 100%;
+    max-width: 850px;
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+.brand-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+    background: #e8f3ff;
+
+    font-size: 34px;
+}
+
+.brand h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #243b53;
+}
+
+.brand p {
+    color: #718096;
+    font-size: 16px;
+}
+
+.role-card h2 {
+    margin-top: 45px;
+    font-size: 26px;
+    color: #243b53;
+}
+
+.select-text {
+    margin-top: 8px;
+    color: #718096;
+}
+
+.role-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+
+    margin-top: 30px;
+}
+
+.role-button {
+    border: 1px solid #e2e8f0;
+    background: white;
+
+    min-height: 170px;
+    padding: 28px;
+
+    border-radius: 16px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 15px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.role-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.09);
+}
+
+.candidate-btn:hover {
+    border-color: #4f86c6;
+}
+
+.hr-btn:hover {
+    border-color: #3b82f6;
+}
+
+.role-icon {
+    font-size: 42px;
+}
+
+.role-button strong {
+    display: block;
+    font-size: 21px;
+    color: #243b53;
+    margin-bottom: 7px;
+}
+
+.role-button small {
+    display: block;
+    max-width: 250px;
+    line-height: 1.5;
+    color: #718096;
+    font-size: 14px;
+}
+
+.footer-text {
+    margin-top: 35px;
+    font-size: 13px;
+    color: #9aa5b1;
+}
+
+
+/* Responsive */
+
+@media (max-width: 650px) {
+
+    .role-card {
+        padding: 35px 22px;
+    }
+
+    .brand h1 {
+        font-size: 25px;
+    }
+
+    .role-options {
+        grid-template-columns: 1fr;
+    }
+
+    .role-button {
+        min-height: 145px;
+    }
+}

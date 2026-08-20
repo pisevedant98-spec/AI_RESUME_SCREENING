@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - Candidate Portal</title>
+  <link rel="stylesheet" href="../css/Candidate/profile.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Candidate Portal</h2>
+      <nav>
+        <a href="candidate-dashboard.html">
+          <span class="nav-icon">🏚️</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="profile.html" class="active">
+          <span class="nav-icon">👤</span>
+          <span>My Profile</span>
+        </a>
+        <a href="candidate-job.html">
+          <span class="nav-icon">💼</span>
+          <span>Browse Jobs</span>
+        </a>
+        <a href="candidate-application.html">
+          <span class="nav-icon">📄</span>
+          <span>My Applications</span>
+        </a>
+        <a href="candidate-resume.html">
+          <span class="nav-icon">📑</span>
+          <span>My Resume</span>
+        </a>
+        <a href="candidate-skill-gap.html">
+          <span class="nav-icon">🧩</span>
+          <span>Skill Gap Analysis</span>
+        </a>
+        <a href="candidate-interviews.html">
+          <span class="nav-icon">🗓️</span>
+          <span>My Interviews</span>
+        </a>
+        <a href="candidate-notifications.html">
+          <span class="nav-icon">🔔</span>
+          <span>Notifications</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <h1>My Profile</h1>
+        <p>Manage your personal and professional information.</p>
+      </header>
+
+      <!-- Profile Header Card -->
+      <div class="profile-header-card">
+        <div class="avatar-info-group">
+          <div class="avatar-circle">👤</div>
+          <div class="candidate-meta">
+            <h2 id="display-name">Candidate Name</h2>
+            <p class="email-text" id="display-email">candidate@email.com</p>
+            <p class="location-text" id="display-location">📍 Maharashtra, India</p>
+          </div>
+        </div>
+        <button class="edit-profile-btn" id="editProfileBtn">✏️ Edit Profile</button>
+      </div>
+
+      <!-- Profile Completion Card -->
+      <div class="section-card">
+        <div class="completion-header">
+          <h3>Profile Completion</h3>
+          <span class="completion-percentage">80%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width: 80%;"></div>
+        </div>
+        <p class="completion-subtext">Complete your profile to improve your job recommendations.</p>
+      </div>
+
+      <!-- Personal Information Card -->
+      <div class="section-card">
+        <div class="section-title">
+          <span class="title-icon">👤</span>
+          <h3>Personal Information</h3>
+        </div>
+        
+        <form class="profile-form" id="profileForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="input-name" value="Candidate Name" readonly>
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="input-email" value="candidate@email.com" readonly>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="text" id="input-phone" value="+91 XXXXX XXXXX" readonly>
+            </div>
+            <div class="form-group">
+              <label>Location</label>
+              <input type="text" id="input-location" value="Maharashtra, India" readonly>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Professional & Education Information -->
+      <div class="section-card">
+        <div class="section-title">
+          <span class="title-icon">🎓</span>
+          <h3>Education & Professional Details</h3>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Education</label>
+            <input type="text" id="input-education" value="Diploma in Engineering" readonly>
+          </div>
+          <div class="form-group">
+            <label>Current Status</label>
+            <input type="text" id="input-status" value="Fresher" readonly>
+          </div>
+          <div class="form-group full-width">
+            <label>Key Skills</label>
+            <input type="text" id="input-skills" value="Python, HTML, CSS, JavaScript" readonly>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/Candidate-js/profile.js"></script>
+</body>
+</html>

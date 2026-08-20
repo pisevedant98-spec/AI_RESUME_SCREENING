@@ -1,0 +1,259 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f0f4f8;
+  color: #1e293b;
+}
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  background-color: #0d141e;
+  color: #94a3b8;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.portal-title {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 28px;
+  padding-left: 8px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #94a3b8;
+  text-decoration: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-item .nav-icon {
+  font-size: 16px;
+}
+
+.nav-item:hover {
+  color: #ffffff;
+  background-color: #16202e;
+}
+
+.nav-item.active {
+  background-color: #00b894;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding-top: 16px;
+  border-top: 1px solid #16202e;
+  margin-top: auto;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ff6b6b;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 107, 107, 0.1);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 36px 48px;
+  max-width: 1200px;
+}
+
+.content-header {
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.page-subtitle {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Interview Card */
+.section-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  margin-bottom: 22px;
+  border: 1px solid #edf2f7;
+}
+
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.status-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.status-scheduled {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.job-heading {
+  font-size: 19px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.job-sub {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.date-badge {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.date-num {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.date-month {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.interview-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-label {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.detail-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.instructions-box {
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+}
+
+.instructions-box h4 {
+  font-size: 13px;
+  color: #92400e;
+  margin-bottom: 4px;
+}
+
+.instructions-box p {
+  font-size: 13px;
+  color: #b45309;
+}
+
+.card-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 16px;
+}
+
+.exp-info {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #00b894;
+  color: #ffffff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .dashboard-container { flex-direction: column; }
+  .sidebar { width: 100%; }
+  .main-content { padding: 20px; }
+  .card-bottom-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
