@@ -2,33 +2,178 @@
    RESUME SCREENING
    =====================================================
 
-   Backend expected candidate structure:
+   Backend:
+   http://127.0.0.1:8000/resume/all
 
-   {
-     id: 101,
-     name: "Candidate Name",
-     email: "candidate@email.com",
-     job: "Software Developer",
-     experience: "2 Years",
-     resumeUrl: "...",
-     status: "pending"
-   }
-
-   No fake candidates are added here.
 ===================================================== */
 
+
+/* =====================================================
+   GLOBAL DATA
+===================================================== */
 
 let candidates = [];
 
 
+/* =====================================================
+   DOM ELEMENTS
+===================================================== */
+
 const candidateList =
-  document.getElementById("candidateList");
+    document.getElementById("candidateList");
 
 const searchInput =
-  document.getElementById("resumeSearch");
+    document.getElementById("resumeSearch");
 
 const statusFilter =
-  document.getElementById("resumeStatus");
+    document.getElementById("resumeStatus");
+
+
+/* =====================================================
+   LOAD CANDIDATES FROM BACKEND
+===================================================== */
+
+async function loadCandidates() {
+
+    try {
+
+        console.log(
+            "Loading candidates from backend..."
+        );
+
+        const result =
+            await apiGet("/resume/all");
+
+
+        console.log(
+            "Backend candidates:",
+            result
+        );
+
+
+        if (
+            !result ||
+            !Array.isArray(
+                result.candidates
+            )
+        ) {
+
+            console.error(
+                "Invalid response from backend"
+            );
+
+            candidates = [];
+
+            updateSummary();
+            renderCandidates();
+
+            return;
+        }
+
+
+        /* =============================================
+           SAVE BACKEND DATA
+        ============================================= */
+
+        candidates =
+            result.candidates.map(
+                function (candidate) {
+
+                    return {
+
+                        id:
+                            candidate.id ??
+                            candidate.user_id,
+
+                        user_id:
+                            candidate.user_id ??
+                            candidate.id,
+
+                        name:
+                            candidate.name ||
+                            "Unknown Candidate",
+
+                        email:
+                            candidate.email ||
+                            "No email available",
+
+                        job:
+                            candidate.job ||
+                            "Candidate",
+
+                        experience:
+                            candidate.experience ||
+                            "Fresher",
+
+                        resumeUrl:
+                            candidate.resumeUrl ||
+                            "",
+
+                        filename:
+                            candidate.filename ||
+                            "",
+
+                        status:
+                            candidate.status ||
+                            "pending",
+
+                        details:
+                            candidate.details ||
+                            {}
+                    };
+
+                }
+            );
+
+
+        console.log(
+            "Candidates loaded:",
+            candidates
+        );
+
+
+        updateSummary();
+
+        renderCandidates();
+
+
+    } catch (error) {
+
+        console.error(
+            "BACKEND CONNECTION FAILED",
+            error
+        );
+
+
+        candidates = [];
+
+        updateSummary();
+
+
+        candidateList.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚠️
+                </div>
+
+                <h3>
+                    Backend Connection Failed
+                </h3>
+
+                <p>
+                    Please make sure the FastAPI
+                    backend is running.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
 
 
 /* =====================================================
@@ -37,280 +182,351 @@ const statusFilter =
 
 function renderCandidates() {
 
-  const searchText =
-    searchInput.value
-      .trim()
-      .toLowerCase();
 
-  const selectedStatus =
-    statusFilter.value;
+    const searchText =
+        searchInput.value
+            .trim()
+            .toLowerCase();
 
 
-  const filteredCandidates =
-    candidates.filter(function (candidate) {
+    const selectedStatus =
+        statusFilter.value;
 
-      const matchesSearch =
 
-        candidate.name
-          .toLowerCase()
-          .includes(searchText)
+    const filteredCandidates =
+        candidates.filter(
+            function (candidate) {
 
-        ||
 
-        candidate.email
-          .toLowerCase()
-          .includes(searchText)
+                const name =
+                    String(
+                        candidate.name || ""
+                    ).toLowerCase();
 
-        ||
 
-        candidate.job
-          .toLowerCase()
-          .includes(searchText);
+                const email =
+                    String(
+                        candidate.email || ""
+                    ).toLowerCase();
 
 
-      const matchesStatus =
+                const job =
+                    String(
+                        candidate.job || ""
+                    ).toLowerCase();
 
-        selectedStatus === "all"
 
-        ||
+                const matchesSearch =
 
-        candidate.status === selectedStatus;
+                    name.includes(
+                        searchText
+                    )
 
+                    ||
 
-      return matchesSearch && matchesStatus;
+                    email.includes(
+                        searchText
+                    )
 
-    });
+                    ||
 
+                    job.includes(
+                        searchText
+                    );
 
-  document.getElementById(
-    "resumeCount"
-  ).textContent =
-    filteredCandidates.length + " resumes";
 
+                const matchesStatus =
 
-  /* =========================
-     EMPTY STATE
-  ========================= */
+                    selectedStatus === "all"
 
-  if (filteredCandidates.length === 0) {
+                    ||
 
-    candidateList.innerHTML = `
+                    candidate.status ===
+                        selectedStatus;
 
-      <div class="empty-state">
 
-        <div class="empty-icon">
-          📄
-        </div>
+                return (
+                    matchesSearch &&
+                    matchesStatus
+                );
 
-        <h3>
-          No Resumes Available
-        </h3>
+            }
+        );
 
-        <p>
-          Candidate resumes will appear here
-          once applications are submitted.
-        </p>
 
-      </div>
+    /* =============================================
+       RESUME COUNT
+    ============================================= */
 
-    `;
+    document.getElementById(
+        "resumeCount"
+    ).textContent =
+        filteredCandidates.length +
+        " resumes";
 
-    return;
-  }
 
+    /* =============================================
+       EMPTY STATE
+    ============================================= */
 
-  /* =========================
-     CANDIDATE CARDS
-  ========================= */
+    if (
+        filteredCandidates.length === 0
+    ) {
 
-  candidateList.innerHTML =
+        candidateList.innerHTML = `
 
-    filteredCandidates
-      .map(function (candidate) {
+            <div class="empty-state">
 
+                <div class="empty-icon">
+                    📄
+                </div>
 
-        let statusText = "";
-
-        let statusClass = "";
-
-
-        if (candidate.status === "pending") {
-
-          statusText =
-            "Pending Review";
-
-          statusClass =
-            "status-pending";
-
-        }
-
-
-        if (candidate.status === "shortlisted") {
-
-          statusText =
-            "Shortlisted";
-
-          statusClass =
-            "status-shortlisted";
-
-        }
-
-
-        if (candidate.status === "rejected") {
-
-          statusText =
-            "Rejected";
-
-          statusClass =
-            "status-rejected";
-
-        }
-
-
-        return `
-
-          <div class="candidate-card">
-
-
-            <div class="candidate-info">
-
-              <h3>
-                ${candidate.name}
-              </h3>
-
-
-              <p>
-                📧 ${candidate.email}
-              </p>
-
-
-              <p>
-                💼 Applied for: ${candidate.job}
-              </p>
-
-
-              <p>
-                🧑‍💻 Experience: ${candidate.experience}
-              </p>
-
-
-              <span class="status ${statusClass}">
-                ${statusText}
-              </span>
+                <h3>
+                    No Resumes Available
+                </h3>
+
+                <p>
+                    Candidate resumes will appear
+                    here once applications are submitted.
+                </p>
 
             </div>
-
-
-
-            <div class="candidate-actions">
-
-
-              <button
-                class="action-btn view-btn"
-                onclick="viewResume(${candidate.id})"
-                type="button"
-              >
-                👁️ View Resume
-              </button>
-
-
-              ${
-                candidate.status === "pending"
-
-                ?
-
-                `
-
-                  <button
-                    class="action-btn shortlist-btn"
-                    onclick="shortlistCandidate(${candidate.id})"
-                    type="button"
-                  >
-                    ✅ Shortlist
-                  </button>
-
-
-                  <button
-                    class="action-btn reject-btn"
-                    onclick="rejectCandidate(${candidate.id})"
-                    type="button"
-                  >
-                    ❌ Reject
-                  </button>
-
-                `
-
-                :
-
-                ""
-              }
-
-
-              ${
-                candidate.status === "shortlisted"
-
-                ?
-
-                `
-
-                  <button
-                    class="action-btn remove-btn"
-                    onclick="removeShortlist(${candidate.id})"
-                    type="button"
-                  >
-                    ↩️ Remove Shortlist
-                  </button>
-
-
-                  <button
-                    class="action-btn reject-btn"
-                    onclick="rejectCandidate(${candidate.id})"
-                    type="button"
-                  >
-                    ❌ Reject
-                  </button>
-
-                `
-
-                :
-
-                ""
-              }
-
-
-              ${
-                candidate.status === "rejected"
-
-                ?
-
-                `
-
-                  <button
-                    class="action-btn reconsider-btn"
-                    onclick="reconsiderCandidate(${candidate.id})"
-                    type="button"
-                  >
-                    🔄 Reconsider
-                  </button>
-
-                `
-
-                :
-
-                ""
-              }
-
-
-            </div>
-
-
-          </div>
 
         `;
 
-      })
+        return;
+    }
 
-      .join("");
+
+    /* =============================================
+       CANDIDATE CARDS
+    ============================================= */
+
+    candidateList.innerHTML =
+
+        filteredCandidates
+            .map(
+                function (candidate) {
+
+
+                    let statusText =
+                        "Pending Review";
+
+                    let statusClass =
+                        "status-pending";
+
+
+                    if (
+                        candidate.status ===
+                        "shortlisted"
+                    ) {
+
+                        statusText =
+                            "Shortlisted";
+
+                        statusClass =
+                            "status-shortlisted";
+
+                    }
+
+
+                    if (
+                        candidate.status ===
+                        "rejected"
+                    ) {
+
+                        statusText =
+                            "Rejected";
+
+                        statusClass =
+                            "status-rejected";
+
+                    }
+
+
+                    return `
+
+                        <div class="candidate-card">
+
+                            <div class="candidate-info">
+
+                                <h3>
+                                    ${escapeHtml(
+                                        candidate.name
+                                    )}
+                                </h3>
+
+                                <p>
+                                    📧
+                                    ${escapeHtml(
+                                        candidate.email
+                                    )}
+                                </p>
+
+                                <p>
+                                    💼 Applied for:
+                                    ${escapeHtml(
+                                        candidate.job
+                                    )}
+                                </p>
+
+                                <p>
+                                    🧑‍💻 Experience:
+                                    ${escapeHtml(
+                                        candidate.experience
+                                    )}
+                                </p>
+
+                                <span
+                                    class="status ${statusClass}"
+                                >
+                                    ${statusText}
+                                </span>
+
+                            </div>
+
+
+                            <div class="candidate-actions">
+
+
+                                <button
+                                    class="action-btn view-btn"
+                                    onclick="viewResume(${candidate.id})"
+                                    type="button"
+                                >
+                                    👁️ View Resume
+                                </button>
+
+
+                                ${
+                                    candidate.status ===
+                                    "pending"
+
+                                    ?
+
+                                    `
+
+                                    <button
+                                        class="action-btn shortlist-btn"
+                                        onclick="shortlistCandidate(${candidate.id})"
+                                        type="button"
+                                    >
+                                        ✅ Shortlist
+                                    </button>
+
+
+                                    <button
+                                        class="action-btn reject-btn"
+                                        onclick="rejectCandidate(${candidate.id})"
+                                        type="button"
+                                    >
+                                        ❌ Reject
+                                    </button>
+
+                                    `
+
+                                    :
+
+                                    ""
+                                }
+
+
+                                ${
+                                    candidate.status ===
+                                    "shortlisted"
+
+                                    ?
+
+                                    `
+
+                                    <button
+                                        class="action-btn remove-btn"
+                                        onclick="removeShortlist(${candidate.id})"
+                                        type="button"
+                                    >
+                                        ↩️ Remove Shortlist
+                                    </button>
+
+
+                                    <button
+                                        class="action-btn reject-btn"
+                                        onclick="rejectCandidate(${candidate.id})"
+                                        type="button"
+                                    >
+                                        ❌ Reject
+                                    </button>
+
+                                    `
+
+                                    :
+
+                                    ""
+                                }
+
+
+                                ${
+                                    candidate.status ===
+                                    "rejected"
+
+                                    ?
+
+                                    `
+
+                                    <button
+                                        class="action-btn reconsider-btn"
+                                        onclick="reconsiderCandidate(${candidate.id})"
+                                        type="button"
+                                    >
+                                        🔄 Reconsider
+                                    </button>
+
+                                    `
+
+                                    :
+
+                                    ""
+                                }
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -321,36 +537,30 @@ function renderCandidates() {
 
 function viewResume(id) {
 
-  const candidate =
-    candidates.find(function (candidate) {
+    const candidate =
+        candidates.find(function (candidate) {
+            return candidate.id === id;
+        });
 
-      return candidate.id === id;
+    if (!candidate) {
+        console.error("Candidate not found:", id);
+        return;
+    }
 
-    });
+    if (!candidate.resumeUrl) {
+        alert("Resume file is not available.");
+        return;
+    }
 
-
-  if (!candidate) {
-    return;
-  }
-
-
-  /*
-    BACKEND VERSION:
-
-    window.open(
-      candidate.resumeUrl,
-      "_blank"
+    console.log(
+        "Opening resume:",
+        candidate.resumeUrl
     );
 
-    For now there is no resume because
-    backend is not connected.
-  */
-
-
-  alert(
-    "Resume viewing will work after the backend and resume storage are connected."
-  );
-
+    window.open(
+        candidate.resumeUrl,
+        "_blank"
+    );
 }
 
 
@@ -360,26 +570,29 @@ function viewResume(id) {
 
 function shortlistCandidate(id) {
 
-  const candidate =
-    candidates.find(function (candidate) {
 
-      return candidate.id === id;
+    const candidate =
+        candidates.find(
+            function (candidate) {
 
-    });
+                return candidate.id === id;
 
-
-  if (!candidate) {
-    return;
-  }
+            }
+        );
 
 
-  candidate.status =
-    "shortlisted";
+    if (!candidate) {
+        return;
+    }
 
 
-  renderCandidates();
+    candidate.status =
+        "shortlisted";
 
-  updateSummary();
+
+    renderCandidates();
+
+    updateSummary();
 
 }
 
@@ -390,26 +603,29 @@ function shortlistCandidate(id) {
 
 function removeShortlist(id) {
 
-  const candidate =
-    candidates.find(function (candidate) {
 
-      return candidate.id === id;
+    const candidate =
+        candidates.find(
+            function (candidate) {
 
-    });
+                return candidate.id === id;
 
-
-  if (!candidate) {
-    return;
-  }
+            }
+        );
 
 
-  candidate.status =
-    "pending";
+    if (!candidate) {
+        return;
+    }
 
 
-  renderCandidates();
+    candidate.status =
+        "pending";
 
-  updateSummary();
+
+    renderCandidates();
+
+    updateSummary();
 
 }
 
@@ -420,26 +636,29 @@ function removeShortlist(id) {
 
 function rejectCandidate(id) {
 
-  const candidate =
-    candidates.find(function (candidate) {
 
-      return candidate.id === id;
+    const candidate =
+        candidates.find(
+            function (candidate) {
 
-    });
+                return candidate.id === id;
 
-
-  if (!candidate) {
-    return;
-  }
+            }
+        );
 
 
-  candidate.status =
-    "rejected";
+    if (!candidate) {
+        return;
+    }
 
 
-  renderCandidates();
+    candidate.status =
+        "rejected";
 
-  updateSummary();
+
+    renderCandidates();
+
+    updateSummary();
 
 }
 
@@ -450,26 +669,29 @@ function rejectCandidate(id) {
 
 function reconsiderCandidate(id) {
 
-  const candidate =
-    candidates.find(function (candidate) {
 
-      return candidate.id === id;
+    const candidate =
+        candidates.find(
+            function (candidate) {
 
-    });
+                return candidate.id === id;
 
-
-  if (!candidate) {
-    return;
-  }
+            }
+        );
 
 
-  candidate.status =
-    "pending";
+    if (!candidate) {
+        return;
+    }
 
 
-  renderCandidates();
+    candidate.status =
+        "pending";
 
-  updateSummary();
+
+    renderCandidates();
+
+    updateSummary();
 
 }
 
@@ -480,43 +702,59 @@ function reconsiderCandidate(id) {
 
 function updateSummary() {
 
-  document.getElementById(
-    "totalResumes"
-  ).textContent =
-    candidates.length;
+
+    document.getElementById(
+        "totalResumes"
+    ).textContent =
+        candidates.length;
 
 
-  document.getElementById(
-    "pendingResumes"
-  ).textContent =
+    document.getElementById(
+        "pendingResumes"
+    ).textContent =
 
-    candidates.filter(function (candidate) {
+        candidates.filter(
+            function (candidate) {
 
-      return candidate.status === "pending";
+                return (
+                    candidate.status ===
+                    "pending"
+                );
 
-    }).length;
-
-
-  document.getElementById(
-    "shortlistedResumes"
-  ).textContent =
-
-    candidates.filter(function (candidate) {
-
-      return candidate.status === "shortlisted";
-
-    }).length;
+            }
+        ).length;
 
 
-  document.getElementById(
-    "rejectedResumes"
-  ).textContent =
+    document.getElementById(
+        "shortlistedResumes"
+    ).textContent =
 
-    candidates.filter(function (candidate) {
+        candidates.filter(
+            function (candidate) {
 
-      return candidate.status === "rejected";
+                return (
+                    candidate.status ===
+                    "shortlisted"
+                );
 
-    }).length;
+            }
+        ).length;
+
+
+    document.getElementById(
+        "rejectedResumes"
+    ).textContent =
+
+        candidates.filter(
+            function (candidate) {
+
+                return (
+                    candidate.status ===
+                    "rejected"
+                );
+
+            }
+        ).length;
 
 }
 
@@ -526,8 +764,8 @@ function updateSummary() {
 ===================================================== */
 
 searchInput.addEventListener(
-  "input",
-  renderCandidates
+    "input",
+    renderCandidates
 );
 
 
@@ -536,15 +774,88 @@ searchInput.addEventListener(
 ===================================================== */
 
 statusFilter.addEventListener(
-  "change",
-  renderCandidates
+    "change",
+    renderCandidates
 );
 
 
 /* =====================================================
-   INITIAL LOAD
+   START APPLICATION
 ===================================================== */
 
-updateSummary();
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-renderCandidates();
+        loadCandidates();
+
+    }
+);
+
+
+/* =====================================================
+   LOAD RESUMES FROM BACKEND
+===================================================== */
+
+async function loadCandidates() {
+
+    try {
+
+        console.log("Loading resumes from backend...");
+
+        const result =
+            await apiGet("/resume/all");
+
+        console.log(
+            "BACKEND RESPONSE:",
+            result
+        );
+
+        if (
+            result &&
+            Array.isArray(result.candidates)
+        ) {
+
+            candidates =
+                result.candidates;
+
+        } else {
+
+            candidates = [];
+
+        }
+
+        console.log(
+            "CANDIDATES LOADED:",
+            candidates
+        );
+
+        updateSummary();
+
+        renderCandidates();
+
+    } catch (error) {
+
+        console.error(
+            "FAILED TO LOAD RESUMES:",
+            error
+        );
+
+        candidates = [];
+
+        updateSummary();
+
+        renderCandidates();
+
+        alert(
+            "Could not connect to the backend. Make sure FastAPI is running."
+        );
+    }
+}
+
+
+/* =====================================================
+   INITIAL LOAD FROM BACKEND
+===================================================== */
+
+loadCandidates();
