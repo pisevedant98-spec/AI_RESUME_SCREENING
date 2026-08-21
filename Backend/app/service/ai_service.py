@@ -1,24 +1,19 @@
+# app/service/ai_service.py
+
 import re
-from typing import List, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 
 # ============================================================
-# GENERIC RESUME AI SERVICE
+# LOCAL RESUME AI / NLP SERVICE
 # ============================================================
+# No OpenAI
+# No API
+# No internet
 #
-# This service does NOT use OpenAI.
-#
-# It is designed for resumes extracted from PDF/DOCX text.
-#
-# Main goals:
-#   1. Correctly identify sections
-#   2. Avoid false education detections
-#   3. Avoid false experience detections
-#   4. Extract projects from project section only
-#   5. Extract certifications from certificate section only
-#   6. Handle two-column PDF extraction reasonably well
-#   7. Work with different resume formats
-#
+# This parser is designed to work with messy PDF text extraction.
+# It uses section detection + patterns + scoring instead of simply
+# searching keywords everywhere.
 # ============================================================
 
 
@@ -27,11 +22,12 @@ from typing import List, Dict, Optional
 # ============================================================
 
 SKILLS = [
-    # Programming
+    # Programming languages
     "Python",
     "Java",
     "C++",
     "C#",
+    "C",
     "JavaScript",
     "TypeScript",
     "PHP",
@@ -48,6 +44,10 @@ SKILLS = [
     "Vue",
     "Node.js",
     "Express.js",
+    "Bootstrap",
+    "Tailwind",
+
+    # Python frameworks
     "Django",
     "Flask",
     "FastAPI",
@@ -57,27 +57,24 @@ SKILLS = [
     "MySQL",
     "PostgreSQL",
     "MongoDB",
-    "Oracle",
     "SQLite",
+    "Oracle",
     "DBMS",
 
-    # AI / ML
+    # AI / ML / Data
     "Artificial Intelligence",
+    "AI",
     "Machine Learning",
     "Deep Learning",
     "Data Science",
     "Data Analysis",
-    "Natural Language Processing",
+    "NLP",
     "Computer Vision",
-
-    # Python libraries
     "Pandas",
     "NumPy",
-    "Matplotlib",
-    "Scikit-learn",
     "TensorFlow",
     "PyTorch",
-    "OpenCV",
+    "Scikit-learn",
 
     # Cloud / DevOps
     "AWS",
@@ -87,21 +84,21 @@ SKILLS = [
     "Kubernetes",
     "Git",
     "GitHub",
-
-    # Tools
-    "Power BI",
-    "Excel",
-    "Figma",
+    "GitLab",
 
     # Other
+    "Power BI",
+    "Excel",
     "XML",
+    "JSON",
     "REST API",
+    "REST",
     "API",
 ]
 
 
 # ============================================================
-# LANGUAGE DATABASE
+# LANGUAGES
 # ============================================================
 
 LANGUAGES = [
@@ -129,75 +126,73 @@ LANGUAGES = [
 # ============================================================
 
 SECTION_ALIASES = {
-
-    "summary": [
-        "summary",
-        "professional summary",
-        "profile",
-        "about me",
-        "objective",
-        "career objective",
-        "professional profile"
-    ],
-
-    "contact": [
-        "contact",
-        "contact details",
-        "personal details"
-    ],
-
-    "experience": [
+    "experience": {
         "experience",
         "work experience",
         "professional experience",
         "employment",
         "internship",
         "internships",
-        "work history"
-    ],
+        "work history",
+        "career history",
+    },
 
-    "education": [
+    "education": {
         "education",
         "academic background",
         "academic qualification",
         "qualifications",
         "educational qualification",
-        "educational background"
-    ],
+        "educational background",
+    },
 
-    "skills": [
-        "skills",
-        "technical skills",
-        "technical skill",
-        "expertise",
-        "technologies",
-        "technical expertise",
-        "core skills",
-        "skills summary"
-    ],
-
-    "projects": [
+    "projects": {
         "projects",
         "project",
         "academic projects",
         "personal projects",
-        "key projects",
-        "major projects"
-    ],
+        "major projects",
+    },
 
-    "certifications": [
-        "certifications",
-        "certification",
+    "certifications": {
         "certificates",
         "certificate",
+        "certifications",
+        "certification",
         "achievements",
-        "awards"
-    ],
+        "awards",
+    },
 
-    "languages": [
+    "skills": {
+        "skills",
+        "technical skills",
+        "technical expertise",
+        "expertise",
+        "technologies",
+        "technical knowledge",
+        "competencies",
+    },
+
+    "languages": {
+        "language",
         "languages",
-        "language"
-    ]
+        "known languages",
+    },
+
+    "contact": {
+        "contact",
+        "contact details",
+        "personal details",
+    },
+
+    "summary": {
+        "summary",
+        "profile",
+        "professional summary",
+        "career objective",
+        "objective",
+        "about me",
+    },
 }
 
 
@@ -206,111 +201,72 @@ SECTION_ALIASES = {
 # ============================================================
 
 def normalize_text(text: str) -> str:
-    """
-    Normalize extracted PDF/DOCX text without destroying
-    meaningful line structure.
-    """
-
     if not text:
         return ""
 
     text = text.replace("\r\n", "\n")
     text = text.replace("\r", "\n")
-    text = text.replace("\xa0", " ")
 
-    # Normalize unusual bullet characters
-    text = text.replace("•", "-")
-    text = text.replace("●", "-")
-    text = text.replace("▪", "-")
-    text = text.replace("◦", "-")
+    # PDF extraction sometimes produces weird spacing.
+    text = text.replace("\u00a0", " ")
+    text = text.replace("\u200b", "")
+
+    return text
+
+
+def clean_line(line: str) -> str:
+    if not line:
+        return ""
+
+    line = line.replace("\u00a0", " ")
+    line = re.sub(r"\s+", " ", line)
+    return line.strip()
+
+
+def get_lines(text: str) -> List[str]:
+    text = normalize_text(text)
 
     lines = []
 
-    for line in text.splitlines():
-
-        line = re.sub(r"[ \t]+", " ", line)
-        line = line.strip()
+    for raw in text.split("\n"):
+        line = clean_line(raw)
 
         if line:
             lines.append(line)
 
-    return "\n".join(lines)
+    return lines
 
 
-def get_lines(text: str) -> List[str]:
-
-    text = normalize_text(text)
-
-    return [
-        line.strip()
-        for line in text.splitlines()
-        if line.strip()
-    ]
-
-
-# ============================================================
-# BASIC HELPERS
-# ============================================================
-
-def clean_value(value: str) -> str:
-
-    if not value:
-        return ""
-
+def normalize_for_compare(value: str) -> str:
+    value = value.lower().strip()
+    value = re.sub(r"[^a-z0-9]+", " ", value)
     value = re.sub(r"\s+", " ", value)
-    return value.strip(" -|:,")
-
-
-def unique_list(values):
-
-    result = []
-
-    seen = set()
-
-    for value in values:
-
-        value = clean_value(value)
-
-        if not value:
-            continue
-
-        key = value.lower()
-
-        if key not in seen:
-            seen.add(key)
-            result.append(value)
-
-    return result
+    return value.strip()
 
 
 # ============================================================
 # SECTION DETECTION
 # ============================================================
 
-def normalize_section_title(line: str) -> str:
+def detect_section(line: str) -> Optional[str]:
+    """
+    Detect only genuine section headings.
 
-    line = line.lower()
+    Important:
+    We DON'T classify a line as a section just because it contains
+    a keyword. It must closely match the heading.
+    """
 
-    # Remove bullets
-    line = re.sub(r"^[\-\*\•\●\▪\◦]+\s*", "", line)
+    normalized = normalize_for_compare(line)
 
-    # Remove punctuation
-    line = re.sub(r"[^a-z ]", "", line)
-
-    line = re.sub(r"\s+", " ", line)
-
-    return line.strip()
-
-
-def get_section_name(line: str) -> Optional[str]:
-
-    normalized = normalize_section_title(line)
+    if not normalized:
+        return None
 
     for section, aliases in SECTION_ALIASES.items():
 
         for alias in aliases:
 
-            alias_normalized = normalize_section_title(alias)
+            alias_normalized = normalize_for_compare(alias)
 
             if normalized == alias_normalized:
                 return section
@@ -318,42 +274,243 @@ def get_section_name(line: str) -> Optional[str]:
     return None
 
 
-def split_sections(lines: List[str]) -> Dict[str, List[str]]:
+def split_sections(text: str) -> Dict[str, List[str]]:
     """
     Split resume into logical sections.
 
-    IMPORTANT:
-    Only lines that exactly resemble section headings
-    are treated as section headings.
-
-    This prevents lines such as:
-        "Computer Engineering diploma student..."
-    from becoming Education.
+    This is the main protection against:
+    - education appearing as experience
+    - projects appearing as certifications
+    - languages appearing as projects
     """
 
-    sections = {}
+    lines = get_lines(text)
 
-    current_section = "header"
+    sections = {
+        "header": [],
+        "summary": [],
+        "contact": [],
+        "experience": [],
+        "education": [],
+        "projects": [],
+        "certifications": [],
+        "skills": [],
+        "languages": [],
+        "other": [],
+    }
 
-    sections[current_section] = []
+    current = "header"
 
     for line in lines:
 
-        section = get_section_name(line)
+        section = detect_section(line)
 
         if section:
-
-            current_section = section
-
-            if current_section not in sections:
-                sections[current_section] = []
-
+            current = section
             continue
 
-        sections.setdefault(current_section, [])
-        sections[current_section].append(line)
+        sections.setdefault(current, [])
+        sections[current].append(line)
 
     return sections
+
+
+# ============================================================
+# GENERIC HELPERS
+# ============================================================
+
+def unique_list(items: List[Any]) -> List[Any]:
+
+    result = []
+    seen = set()
+
+    for item in items:
+
+        if isinstance(item, str):
+            key = normalize_for_compare(item)
+        else:
+            key = str(item)
+
+        if key and key not in seen:
+            seen.add(key)
+            result.append(item)
+
+    return result
+
+
+def contains_year(text: str) -> bool:
+    return bool(
+        re.search(
+            r"\b(?:19|20)\d{2}\b",
+            text
+        )
+    )
+
+
+def extract_year_range(text: str) -> Optional[str]:
+
+    match = re.search(
+        r"\b((?:19|20)\d{2})\s*[-–—]\s*((?:19|20)\d{2}|Present|Current)\b",
+        text,
+        re.IGNORECASE
+    )
+
+    if match:
+        return f"{match.group(1)} - {match.group(2)}"
+
+    match = re.search(
+        r"\b((?:19|20)\d{2})\b",
+        text
+    )
+
+    if match:
+        return match.group(1)
+
+    return None
+
+
+def extract_percentage(text: str) -> Optional[str]:
+
+    match = re.search(
+        r"(\d{1,3}(?:\.\d+)?)\s*%",
+        text
+    )
+
+    if match:
+        return f"{match.group(1)}%"
+
+    return None
+
+
+def remove_year(text: str) -> str:
+
+    text = re.sub(
+        r"\b(?:19|20)\d{2}\s*[-–—]\s*(?:19|20)?\d{2}\b",
+        "",
+        text
+    )
+
+    text = re.sub(
+        r"\b(?:19|20)\d{2}\b",
+        "",
+        text
+    )
+
+    return clean_line(text)
+
+
+# ============================================================
+# NAME
+# ============================================================
+
+def extract_name(text: str) -> Optional[str]:
+
+    lines = get_lines(text)
+
+    if not lines:
+        return None
+
+    # Explicit name label
+    for line in lines[:20]:
+
+        match = re.match(
+            r"^(?:name|full name)\s*[:\-]\s*(.+)$",
+            line,
+            re.IGNORECASE
+        )
+
+        if match:
+            candidate = clean_line(match.group(1))
+
+            if candidate:
+                return candidate
+
+    ignored = {
+        "resume",
+        "curriculum vitae",
+        "cv",
+        "profile",
+        "summary",
+        "objective",
+        "contact",
+        "contact details",
+        "experience",
+        "education",
+        "projects",
+        "skills",
+        "expertise",
+        "certificates",
+        "certifications",
+        "languages",
+    }
+
+    candidates = []
+
+    for index, line in enumerate(lines[:20]):
+
+        lower = line.lower()
+
+        if lower in ignored:
+            continue
+
+        if "@" in line:
+            continue
+
+        if re.search(r"\d{5,}", line):
+            continue
+
+        if detect_section(line):
+            continue
+
+        # Do not accept obvious job titles.
+        if any(
+            word in lower
+            for word in [
+                "engineer",
+                "developer",
+                "intern",
+                "student",
+                "manager",
+                "designer",
+                "analyst",
+                "consultant",
+                "specialist",
+            ]
+        ):
+            continue
+
+        if re.fullmatch(
+            r"[A-Za-z][A-Za-z .'\-]{2,60}",
+            line
+        ):
+            words = line.split()
+
+            if 1 <= len(words) <= 5:
+
+                score = 0
+
+                if index == 0:
+                    score += 10
+
+                if len(words) >= 2:
+                    score += 5
+
+                if line.isupper():
+                    score += 5
+
+                candidates.append(
+                    (score, line)
+                )
+
+    if candidates:
+        candidates.sort(
+            key=lambda x: x[0],
+            reverse=True
+        )
+
+        return candidates[0][1]
+
+    return None
 
 
 # ============================================================
@@ -362,18 +519,10 @@ def split_sections(lines: List[str]) -> Dict[str, List[str]]:
 
 def extract_email(text: str) -> Optional[str]:
 
-    if not text:
-        return None
-
-    pattern = (
-        r"[A-Za-z0-9._%+\-]+"
-        r"@"
-        r"[A-Za-z0-9.\-]+"
-        r"\."
-        r"[A-Za-z]{2,}"
+    match = re.search(
+        r"[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}",
+        text
     )
-
-    match = re.search(pattern, text)
 
     if match:
         return match.group(0).lower()
@@ -387,135 +536,20 @@ def extract_email(text: str) -> Optional[str]:
 
 def extract_phone(text: str) -> Optional[str]:
 
-    if not text:
-        return None
+    patterns = [
+        r"(?:\+91[\s\-]*)?([6-9]\d{4})[\s\-]?(\d{5})",
+        r"(?:\+91[\s\-]*)?([6-9]\d{2})[\s\-]?(\d{3})[\s\-]?(\d{4})",
+    ]
 
-    # +91 98765 43210
-    match = re.search(
-        r"(?:\+91|91)[\s\-]*"
-        r"([6-9]\d{4})[\s\-]*"
-        r"(\d{5})",
-        text
-    )
+    for pattern in patterns:
 
-    if match:
-        return match.group(1) + match.group(2)
-
-    # 98765 43210
-    match = re.search(
-        r"(?<!\d)"
-        r"([6-9]\d{4})"
-        r"[\s\-]*"
-        r"(\d{5})"
-        r"(?!\d)",
-        text
-    )
-
-    if match:
-        return match.group(1) + match.group(2)
-
-    return None
-
-
-# ============================================================
-# NAME
-# ============================================================
-
-def is_name_candidate(value: str) -> bool:
-
-    value = clean_value(value)
-
-    if not value:
-        return False
-
-    if len(value) < 3 or len(value) > 60:
-        return False
-
-    if "@" in value:
-        return False
-
-    if re.search(r"\d", value):
-        return False
-
-    # Avoid obvious headings
-    invalid = {
-        "resume",
-        "curriculum vitae",
-        "cv",
-        "contact",
-        "contact details",
-        "experience",
-        "education",
-        "skills",
-        "expertise",
-        "projects",
-        "certificates",
-        "certifications",
-        "languages",
-        "summary",
-        "profile",
-        "objective"
-    }
-
-    if value.lower() in invalid:
-        return False
-
-    return bool(
-        re.fullmatch(
-            r"[A-Za-z][A-Za-z .'\-]{2,59}",
-            value
-        )
-    )
-
-
-def extract_name(text: str) -> Optional[str]:
-
-    lines = get_lines(text)
-
-    # Explicit Name:
-    for line in lines[:20]:
-
-        match = re.match(
-            r"^(?:name|full name)\s*[:\-]\s*(.+)$",
-            line,
-            re.IGNORECASE
-        )
+        match = re.search(pattern, text)
 
         if match:
+            digits = "".join(match.groups())
 
-            candidate = clean_value(match.group(1))
-
-            if is_name_candidate(candidate):
-                return candidate
-
-    # Usually the first strong name-like line
-    for line in lines[:12]:
-
-        candidate = clean_value(line)
-
-        if not is_name_candidate(candidate):
-            continue
-
-        # Job titles are not names
-        lower = candidate.lower()
-
-        job_words = [
-            "engineer",
-            "developer",
-            "intern",
-            "student",
-            "manager",
-            "designer",
-            "analyst",
-            "consultant",
-            "specialist",
-            "administrator"
-        ]
-
-        if any(word in lower for word in job_words):
-            continue
-
-        return candidate
+            if len(digits) == 10:
+                return digits
 
     return None
 
@@ -526,32 +560,31 @@ def extract_name(text: str) -> Optional[str]:
 
 def extract_skills(text: str) -> List[str]:
 
-    if not text:
-        return []
+    sections = split_sections(text)
 
-    lines = get_lines(text)
-    sections = split_sections(lines)
+    # Skills section gets priority.
+    skill_text = " ".join(
+        sections.get("skills", [])
+    )
 
-    # Prefer Skills section.
-    search_parts = []
-
-    if "skills" in sections:
-        search_parts.extend(sections["skills"])
-
-    # Also use full resume because many resumes mention
-    # technologies inside project descriptions.
-    search_parts.extend(lines)
-
-    search_text = "\n".join(search_parts)
+    # Also use full text as fallback because many PDF layouts
+    # don't preserve the original columns.
+    search_text = (
+        skill_text
+        if skill_text
+        else text
+    )
 
     found = []
 
-    for skill in SKILLS:
+    # Longer skills first.
+    ordered_skills = sorted(
+        SKILLS,
+        key=len,
+        reverse=True
+    )
 
-        # C is intentionally NOT included as a normal skill.
-        # This prevents random "C" matches.
-        if skill == "C":
-            continue
+    for skill in ordered_skills:
 
         pattern = (
             r"(?<![A-Za-z0-9+#])"
@@ -567,384 +600,232 @@ def extract_skills(text: str) -> List[str]:
 
             found.append(skill)
 
-    # Remove duplicates
-    return unique_list(found)
+    # Remove duplicate variants.
+    result = []
 
+    seen = set()
 
-# ============================================================
-# YEAR / DATE HELPERS
-# ============================================================
+    for skill in found:
 
-YEAR_PATTERN = re.compile(
-    r"\b(?:19|20)\d{2}\b"
-)
+        key = normalize_for_compare(skill)
 
-YEAR_RANGE_PATTERN = re.compile(
-    r"\b(?:19|20)\d{2}\s*[-–]\s*(?:19|20)\d{2}\b"
-)
+        if key not in seen:
+            seen.add(key)
+            result.append(skill)
 
-
-def extract_year_range(text: str) -> Optional[str]:
-
-    if not text:
-        return None
-
-    match = YEAR_RANGE_PATTERN.search(text)
-
-    if match:
-        return clean_value(match.group(0))
-
-    years = YEAR_PATTERN.findall(text)
-
-    if len(years) >= 2:
-
-        return f"{years[0]} - {years[1]}"
-
-    if len(years) == 1:
-        return years[0]
-
-    return None
-
-
-def extract_percentage(text: str) -> Optional[str]:
-
-    match = re.search(
-        r"\b\d{1,3}(?:\.\d+)?\s*%",
-        text
-    )
-
-    if match:
-        return match.group(0).replace(" ", "")
-
-    return None
+    return result
 
 
 # ============================================================
 # EDUCATION
 # ============================================================
 
-EDUCATION_DEGREE_PATTERNS = [
-
-    (
-        "Diploma",
-        r"\bdiploma\s+(?:in\s+)?"
-        r"[A-Za-z& ]{2,80}"
-    ),
-
-    (
-        "B.Tech",
-        r"\bb\.?\s*tech\b"
-    ),
-
-    (
-        "B.E",
-        r"\bb\.?\s*e\.?\b"
-    ),
-
-    (
-        "M.Tech",
-        r"\bm\.?\s*tech\b"
-    ),
-
-    (
-        "M.E",
-        r"\bm\.?\s*e\.?\b"
-    ),
-
-    (
-        "BCA",
-        r"\bbca\b"
-    ),
-
-    (
-        "MCA",
-        r"\bmca\b"
-    ),
-
-    (
-        "B.Sc",
-        r"\bb\.?\s*sc\b"
-    ),
-
-    (
-        "M.Sc",
-        r"\bm\.?\s*sc\b"
-    ),
-
-    (
-        "BBA",
-        r"\bbba\b"
-    ),
-
-    (
-        "MBA",
-        r"\bmba\b"
-    ),
-
-    (
-        "Bachelor",
-        r"\bbachelor(?:'s)?\b"
-    ),
-
-    (
-        "Master",
-        r"\bmaster(?:'s)?\b"
-    ),
-
-    (
-        "SSC",
-        r"\bssc\b"
-    ),
-
-    (
-        "HSC",
-        r"\bhsc\b"
-    )
+DEGREE_PATTERNS = [
+    r"\bph\.?d\b",
+    r"\bdoctorate\b",
+    r"\bm\.?tech\b",
+    r"\bmtech\b",
+    r"\bm\.?e\b",
+    r"\bmaster(?:'s)?\b",
+    r"\bmca\b",
+    r"\bmba\b",
+    r"\bm\.?sc\b",
+    r"\bb\.?tech\b",
+    r"\bbtech\b",
+    r"\bb\.?e\b",
+    r"\bbachelor(?:'s)?\b",
+    r"\bbca\b",
+    r"\bbba\b",
+    r"\bb\.?sc\b",
+    r"\bdiploma\b",
+    r"\bssc\b",
+    r"\bhsc\b",
+    r"\b10th\b",
+    r"\b12th\b",
+    r"\bhigher secondary\b",
 ]
 
 
-def looks_like_education_line(line: str) -> bool:
+def looks_like_education(line: str) -> bool:
 
     lower = line.lower()
 
-    # A real education line should contain one of these.
-    degree_words = [
-        "diploma",
-        "b.tech",
-        "btech",
-        "b.e",
-        "b.e.",
-        "m.tech",
-        "mtech",
-        "m.e",
-        "m.e.",
-        "bca",
-        "mca",
-        "b.sc",
-        "m.sc",
-        "bba",
-        "mba",
-        "bachelor",
-        "master",
-        "ssc",
-        "hsc",
-        "secondary",
-        "school",
-        "polytechnic",
-        "college",
-        "university",
-        "degree"
-    ]
-
-    if not any(word in lower for word in degree_words):
-        return False
-
-    # CRITICAL:
-    # Do not treat summary sentences as education.
-    bad_phrases = [
-        "diploma student with",
-        "student with",
-        "internship experience",
-        "hands-on experience",
-        "skilled in",
-        "strong problem",
-        "passion for"
-    ]
-
-    if any(phrase in lower for phrase in bad_phrases):
-        return False
-
-    return True
-
-
-def build_education_entry(
-    line: str,
-    nearby_lines: List[str]
-) -> Optional[Dict]:
-
-    if not looks_like_education_line(line):
-        return None
-
-    combined = " ".join(
-        [line] + nearby_lines
+    return any(
+        re.search(pattern, lower)
+        for pattern in DEGREE_PATTERNS
     )
 
-    combined = clean_value(combined)
 
-    # Degree
-    degree = None
+def find_institution(lines: List[str], index: int) -> Optional[str]:
 
-    for label, pattern in EDUCATION_DEGREE_PATTERNS:
+    candidates = []
 
-        match = re.search(
-            pattern,
-            line,
-            re.IGNORECASE
-        )
+    start = max(0, index - 2)
+    end = min(len(lines), index + 4)
 
-        if match:
+    for i in range(start, end):
 
-            if label == "Diploma":
+        if i == index:
+            continue
 
-                degree = clean_value(
-                    match.group(0)
-                )
+        line = lines[i]
 
-                # Stop degree from swallowing a huge sentence.
-                degree = re.sub(
-                    r"\s+Percentage.*$",
-                    "",
-                    degree,
-                    flags=re.IGNORECASE
-                )
+        lower = line.lower()
 
-            else:
-                degree = label
+        if "percentage" in lower:
+            continue
 
-            break
+        if re.search(r"\b(?:19|20)\d{2}\b", line):
+            continue
 
-    if not degree:
-        return None
+        if "@" in line:
+            continue
 
-    # Year
-    year = extract_year_range(combined)
-
-    # Percentage
-    percentage = extract_percentage(combined)
-
-    # Institution
-    institution = None
-
-    institution_patterns = [
-        r"([A-Z][A-Za-z .&'-]*(?:Polytechnic|College|University|School|Institute|Institution)[A-Za-z .,&'-]*)",
-        r"([A-Z][A-Za-z .&'-]+,\s*[A-Z][A-Za-z .&'-]+)"
-    ]
-
-    for pattern in institution_patterns:
-
-        match = re.search(
-            pattern,
-            combined,
-            re.IGNORECASE
-        )
-
-        if match:
-
-            candidate = clean_value(
-                match.group(1)
-            )
-
-            # Remove obvious junk
-            candidate = re.sub(
-                r"\s+Percentage.*$",
-                "",
-                candidate,
-                flags=re.IGNORECASE
-            )
-
-            if len(candidate) >= 4:
-                institution = candidate
-                break
-
-    return {
-        "degree": degree,
-        "year": year,
-        "institution": institution,
-        "percentage": percentage
-    }
-
-
-def extract_education(text: str) -> List[Dict]:
-
-    lines = get_lines(text)
-    sections = split_sections(lines)
-
-    education_lines = sections.get(
-        "education",
-        []
-    )
-
-    # If an Education heading exists, ONLY parse its section.
-    # This is the most important protection against false detections.
-    if education_lines:
-
-        candidates = education_lines
-
-    else:
-
-        # Fallback: search for very strong degree lines only.
-        candidates = []
-
-        for line in lines:
-
-            lower = line.lower()
-
-            strong_patterns = [
-                "diploma in ",
-                "b.tech",
-                "btech",
-                "b.e.",
-                "m.tech",
-                "mtech",
-                "bca",
-                "mca",
-                "b.sc",
-                "m.sc",
-                "mba",
-                "bba",
-                "ssc",
-                "hsc"
+        # Strong institution indicators.
+        if any(
+            word in lower
+            for word in [
+                "university",
+                "college",
+                "school",
+                "polytechnic",
+                "institute",
+                "academy",
             ]
+        ):
+            candidates.append(line)
 
-            if any(
-                pattern in lower
-                for pattern in strong_patterns
-            ):
+    if candidates:
+        return candidates[0]
 
-                if looks_like_education_line(line):
-                    candidates.append(line)
+    return None
+
+
+def extract_education(text: str) -> List[Dict[str, Optional[str]]]:
+
+    sections = split_sections(text)
+
+    lines = sections.get("education", [])
+
+    # If a clean education section exists, use it.
+    # Otherwise find lines that look strongly educational.
+    if not lines:
+
+        all_lines = get_lines(text)
+
+        lines = [
+            line
+            for line in all_lines
+            if looks_like_education(line)
+        ]
 
     results = []
 
-    for i, line in enumerate(candidates):
+    i = 0
 
-        nearby = candidates[
-            i + 1:i + 3
-        ]
+    while i < len(lines):
 
-        entry = build_education_entry(
-            line,
-            nearby
+        line = lines[i]
+
+        if not looks_like_education(line):
+            i += 1
+            continue
+
+        # Reject sentences that merely mention education.
+        lower = line.lower()
+
+        if (
+            len(line.split()) > 10
+            and not re.search(
+                r"\b(?:diploma|degree|ssc|hsc|btech|b\.tech|mtech|m\.tech|bca|mca)\b",
+                lower
+            )
+        ):
+            i += 1
+            continue
+
+        year = extract_year_range(line)
+
+        percentage = extract_percentage(line)
+
+        degree = remove_year(line)
+
+        degree = re.sub(
+            r"\bpercentage\s*:\s*[\d.]+\s*%",
+            "",
+            degree,
+            flags=re.IGNORECASE
         )
 
-        if entry:
+        degree = clean_line(degree)
 
-            # Prevent duplicate degrees
-            duplicate = False
+        # Sometimes year and percentage are on nearby lines.
+        nearby = lines[i:i + 4]
 
-            for existing in results:
+        for nearby_line in nearby:
 
-                if (
-                    existing["degree"].lower()
-                    == entry["degree"].lower()
-                    and
-                    existing.get("year")
-                    == entry.get("year")
-                ):
-                    duplicate = True
-                    break
+            if not year:
+                year = extract_year_range(
+                    nearby_line
+                )
 
-            if not duplicate:
-                results.append(entry)
+            if not percentage:
+                percentage = extract_percentage(
+                    nearby_line
+                )
 
-    return results[:10]
+        institution = find_institution(
+            lines,
+            i
+        )
+
+        # Remove accidental institution fragments.
+        if institution:
+            institution = clean_line(institution)
+
+        # Valid education entries must have a real degree keyword.
+        if not looks_like_education(degree):
+            i += 1
+            continue
+
+        results.append({
+            "degree": degree,
+            "year": year,
+            "institution": institution,
+            "percentage": percentage,
+        })
+
+        i += 1
+
+    # Deduplicate.
+    final = []
+
+    seen = set()
+
+    for item in results:
+
+        key = (
+            normalize_for_compare(
+                item["degree"] or ""
+            ),
+            item["year"] or "",
+            normalize_for_compare(
+                item["institution"] or ""
+            ),
+        )
+
+        if key not in seen:
+            seen.add(key)
+            final.append(item)
+
+    return final[:10]
 
 
 # ============================================================
 # EXPERIENCE
 # ============================================================
 
-JOB_TITLE_WORDS = [
+EXPERIENCE_ROLE_WORDS = [
     "intern",
     "developer",
     "engineer",
@@ -953,215 +834,228 @@ JOB_TITLE_WORDS = [
     "manager",
     "consultant",
     "administrator",
-    "programmer",
     "specialist",
     "trainee",
-    "associate"
+    "associate",
+    "executive",
+    "architect",
 ]
 
 
-def looks_like_job_title(line: str) -> bool:
+def looks_like_experience_role(line: str) -> bool:
 
     lower = line.lower()
-
-    return any(
-        re.search(
-            r"\b" + re.escape(word) + r"\b",
-            lower
-        )
-        for word in JOB_TITLE_WORDS
-    )
-
-
-def looks_like_company(line: str) -> bool:
-
-    lower = line.lower()
-
-    company_words = [
-        "pvt",
-        "private",
-        "ltd",
-        "limited",
-        "technologies",
-        "technology",
-        "solutions",
-        "systems",
-        "software",
-        "services",
-        "company",
-        "inc",
-        "llp",
-        "itvedant",
-        "jalgi"
-    ]
 
     return any(
         word in lower
-        for word in company_words
+        for word in EXPERIENCE_ROLE_WORDS
     )
 
 
-def extract_experience(text: str) -> List[Dict]:
+def find_company(lines: List[str], index: int) -> Optional[str]:
 
-    lines = get_lines(text)
-    sections = split_sections(lines)
+    candidates = []
 
-    experience_lines = sections.get(
-        "experience",
-        []
-    )
+    start = max(0, index - 2)
+    end = min(len(lines), index + 5)
 
-    # If Experience section exists, ONLY use it.
-    if not experience_lines:
+    for i in range(start, end):
+
+        if i == index:
+            continue
+
+        line = lines[i]
+        lower = line.lower()
+
+        # Never treat contact data as company.
+        if "@" in line:
+            continue
+
+        if re.search(
+            r"\b(?:phone|email|address)\b",
+            lower
+        ):
+            continue
+
+        if re.search(
+            r"\b\d{10}\b",
+            line
+        ):
+            continue
+
+        # Education shouldn't become company.
+        if looks_like_education(line):
+            continue
+
+        # Company indicators.
+        if any(
+            token in lower
+            for token in [
+                "pvt",
+                "private",
+                "ltd",
+                "limited",
+                "technologies",
+                "technology",
+                "solutions",
+                "systems",
+                "software",
+                "company",
+                "corporation",
+                "inc",
+                "llp",
+                "itvedant",
+            ]
+        ):
+            candidates.append(line)
+
+    if candidates:
+        return candidates[0]
+
+    return None
+
+
+def extract_experience(text: str) -> List[Dict[str, Optional[str]]]:
+
+    sections = split_sections(text)
+
+    lines = sections.get("experience", [])
+
+    # If there is no experience section, don't scan the whole resume
+    # aggressively. This avoids education/projects becoming experience.
+    if not lines:
         return []
 
     results = []
 
     i = 0
 
-    while i < len(experience_lines):
+    while i < len(lines):
 
-        line = experience_lines[i]
+        line = lines[i]
 
         year = extract_year_range(line)
 
-        # A job title normally contains an internship/job word.
-        if looks_like_job_title(line):
+        # A role is strongest when it contains an experience role word.
+        role_match = looks_like_experience_role(line)
 
-            role = clean_value(line)
+        if not role_match:
+            i += 1
+            continue
 
-            # Remove date from role
-            role = YEAR_RANGE_PATTERN.sub(
-                "",
-                role
-            )
+        # Reject generic sentences.
+        if len(line.split()) > 12:
+            i += 1
+            continue
 
-            role = clean_value(role)
+        role = remove_year(line)
 
-            company = None
+        role = clean_line(role)
 
-            # Search next few lines for company.
-            for j in range(
-                i + 1,
-                min(
-                    i + 5,
-                    len(experience_lines)
+        # Remove obvious junk from role.
+        role = re.sub(
+            r"^(?:phone|email|address)\s+",
+            "",
+            role,
+            flags=re.IGNORECASE
+        )
+
+        if not role:
+            i += 1
+            continue
+
+        company = find_company(
+            lines,
+            i
+        )
+
+        # Search nearby lines for duration.
+        if not year:
+
+            for nearby in lines[i:i + 4]:
+
+                possible_year = extract_year_range(
+                    nearby
                 )
-            ):
 
-                candidate = experience_lines[j]
-
-                if looks_like_company(candidate):
-
-                    company = clean_value(
-                        candidate
-                    )
-
-                    # Remove date
-                    company = YEAR_RANGE_PATTERN.sub(
-                        "",
-                        company
-                    )
-
-                    company = clean_value(
-                        company
-                    )
-
+                if possible_year:
+                    year = possible_year
                     break
 
-            # If company is on same line
-            if not company:
-
-                same_line_match = re.search(
-                    r"(?:at|@)\s+(.+)$",
-                    role,
-                    re.IGNORECASE
-                )
-
-                if same_line_match:
-
-                    company = clean_value(
-                        same_line_match.group(1)
-                    )
-
-            # Ignore generic job-like sentences
-            if (
-                role
-                and
-                len(role) <= 100
-                and
-                not re.search(
-                    r"student|experience with|hands-on|"
-                    r"problem-solving|passion|skills",
-                    role,
-                    re.IGNORECASE
-                )
-            ):
-
-                results.append({
-                    "role": role,
-                    "company": company,
-                    "duration": year
-                })
+        results.append({
+            "role": role,
+            "company": company,
+            "duration": year,
+        })
 
         i += 1
 
-    # Remove duplicate entries
-    cleaned = []
+    # Deduplicate.
+    final = []
 
     seen = set()
 
     for item in results:
 
         key = (
-            item["role"].lower(),
-            (item["company"] or "").lower(),
-            item["duration"] or ""
+            normalize_for_compare(
+                item["role"] or ""
+            ),
+            normalize_for_compare(
+                item["company"] or ""
+            ),
+            item["duration"] or "",
         )
 
         if key not in seen:
-
             seen.add(key)
-            cleaned.append(item)
+            final.append(item)
 
-    return cleaned[:10]
+    return final[:15]
 
 
 # ============================================================
 # PROJECTS
 # ============================================================
 
-def is_project_candidate(line: str) -> bool:
+def looks_like_project(line: str) -> bool:
 
-    line = clean_value(line)
+    lower = line.lower()
 
     if not line:
         return False
 
-    lower = line.lower()
-
-    # Ignore obvious noise
-    bad = [
-        "percentage:",
-        "completed a",
-        "internship",
+    # Project names usually aren't headings, contact data,
+    # education or certificate lines.
+    forbidden = [
+        "english",
+        "hindi",
+        "marathi",
+        "certificates",
+        "certificate",
+        "certification",
+        "education",
         "experience",
-        "successfully presented",
-        "participation certificate",
-        "contact",
+        "skills",
+        "percentage",
         "phone",
         "email",
-        "address"
+        "address",
     ]
 
-    if any(
-        phrase in lower
-        for phrase in bad
-    ):
+    if lower in forbidden:
         return False
 
-    # Project lines usually aren't extremely long.
-    if len(line) > 180:
+    if "@" in line:
+        return False
+
+    if re.search(r"\b\d{10}\b", line):
+        return False
+
+    if looks_like_education(line):
+        return False
+
+    if "%" in line:
         return False
 
     return True
@@ -1169,33 +1063,29 @@ def is_project_candidate(line: str) -> bool:
 
 def extract_projects(text: str) -> List[str]:
 
-    lines = get_lines(text)
-    sections = split_sections(lines)
+    sections = split_sections(text)
 
-    project_lines = sections.get(
-        "projects",
-        []
-    )
+    lines = sections.get("projects", [])
 
-    # ONLY use actual Projects section.
-    # Never guess projects from the whole resume.
-    if not project_lines:
+    if not lines:
         return []
 
     projects = []
 
-    for line in project_lines:
+    for line in lines:
 
-        line = clean_value(line)
+        if not looks_like_project(line):
+            continue
 
-        # Remove bullet
-        line = re.sub(
-            r"^[\-\*\•\●\▪\◦]+\s*",
-            "",
-            line
-        )
+        # Avoid section headings accidentally included.
+        if detect_section(line):
+            continue
 
-        if not is_project_candidate(line):
+        # A project usually has reasonable length.
+        if len(line) < 3:
+            continue
+
+        if len(line) > 150:
             continue
 
         projects.append(line)
@@ -1209,39 +1099,30 @@ def extract_projects(text: str) -> List[str]:
 
 def extract_certifications(text: str) -> List[str]:
 
-    lines = get_lines(text)
-    sections = split_sections(lines)
+    sections = split_sections(text)
 
-    certificate_lines = sections.get(
-        "certifications",
-        []
-    )
+    lines = sections.get("certifications", [])
 
-    if not certificate_lines:
+    if not lines:
         return []
 
     results = []
 
-    for line in certificate_lines:
+    for line in lines:
 
-        line = clean_value(line)
+        if not line:
+            continue
 
-        lower = line.lower()
+        if detect_section(line):
+            continue
 
-        # Ignore section noise
-        if lower in {
+        # Don't treat generic certificate words as certificates.
+        if normalize_for_compare(line) in {
+            "certificate",
             "certificates",
             "certification",
-            "certifications"
+            "certifications",
         }:
-            continue
-
-        # Ignore generic sentence fragments
-        if len(line) < 4:
-            continue
-
-        # Remove obvious project leakage
-        if "project management" == lower:
             continue
 
         results.append(line)
@@ -1255,213 +1136,67 @@ def extract_certifications(text: str) -> List[str]:
 
 def extract_languages(text: str) -> List[str]:
 
-    lines = get_lines(text)
-    sections = split_sections(lines)
+    sections = split_sections(text)
 
-    # Prefer language section
-    language_lines = sections.get(
-        "languages",
-        []
+    section_text = " ".join(
+        sections.get("languages", [])
     )
 
-    if language_lines:
-
-        search_text = " ".join(
-            language_lines
-        )
-
-    else:
-
-        # Fallback to only lines near a Languages heading.
-        search_text = ""
-
-        for i, line in enumerate(lines):
-
-            if get_section_name(line) == "languages":
-
-                search_text = " ".join(
-                    lines[i + 1:i + 10]
-                )
-
-                break
+    # If language section exists, trust it.
+    # Otherwise use full text only for known languages.
+    search_text = (
+        section_text
+        if section_text
+        else text
+    )
 
     found = []
 
     for language in LANGUAGES:
 
-        if re.search(
+        pattern = (
             r"(?<![A-Za-z])"
             + re.escape(language)
-            + r"(?![A-Za-z])",
+            + r"(?![A-Za-z])"
+        )
+
+        if re.search(
+            pattern,
             search_text,
             re.IGNORECASE
         ):
-
             found.append(language)
 
-    return found
+    return unique_list(found)
 
 
 # ============================================================
-# FALLBACK LANGUAGE EXTRACTION
+# SUMMARY
 # ============================================================
 
-def extract_languages_from_resume(text: str) -> List[str]:
+def extract_summary(text: str) -> Optional[str]:
 
-    lines = get_lines(text)
+    sections = split_sections(text)
 
-    for i, line in enumerate(lines):
+    lines = sections.get("summary", [])
 
-        normalized = normalize_section_title(
-            line
-        )
+    if not lines:
+        return None
 
-        if normalized in {
-            "language",
-            "languages"
-        }:
+    value = " ".join(lines)
 
-            nearby_text = " ".join(
-                lines[i + 1:i + 8]
-            )
+    value = clean_line(value)
 
-            found = []
-
-            for language in LANGUAGES:
-
-                if re.search(
-                    r"(?<![A-Za-z])"
-                    + re.escape(language)
-                    + r"(?![A-Za-z])",
-                    nearby_text,
-                    re.IGNORECASE
-                ):
-
-                    found.append(language)
-
-            if found:
-                return found
-
-    return []
+    return value if value else None
 
 
 # ============================================================
-# FINAL CLEANUP
+# MAIN EXTRACTION
 # ============================================================
 
-def clean_education(items):
-
-    result = []
-
-    for item in items:
-
-        if not item:
-            continue
-
-        degree = clean_value(
-            item.get("degree", "")
-        )
-
-        # Remove obvious false positives
-        bad = [
-            "student with",
-            "internship experience",
-            "hands-on experience",
-            "skilled in",
-            "problem-solving",
-            "passion for"
-        ]
-
-        if any(
-            phrase in degree.lower()
-            for phrase in bad
-        ):
-            continue
-
-        if len(degree) > 100:
-            continue
-
-        result.append({
-            "degree": degree,
-            "year": item.get("year"),
-            "institution": item.get("institution"),
-            "percentage": item.get("percentage")
-        })
-
-    return result
-
-
-def clean_experience(items):
-
-    result = []
-
-    seen = set()
-
-    for item in items:
-
-        role = clean_value(
-            item.get("role", "")
-        )
-
-        company = clean_value(
-            item.get("company") or ""
-        )
-
-        duration = clean_value(
-            item.get("duration") or ""
-        )
-
-        if not role:
-            continue
-
-        # Reject summary sentences
-        if re.search(
-            r"student with|hands-on experience|"
-            r"strong problem|passion for|"
-            r"skilled in",
-            role,
-            re.IGNORECASE
-        ):
-            continue
-
-        key = (
-            role.lower(),
-            company.lower(),
-            duration.lower()
-        )
-
-        if key in seen:
-            continue
-
-        seen.add(key)
-
-        result.append({
-            "role": role,
-            "company": company or None,
-            "duration": duration or None
-        })
-
-    return result
-
-
-# ============================================================
-# MAIN EXTRACTION FUNCTION
-# ============================================================
-
-def extract_resume_with_ai(text: str) -> Dict:
-
-    """
-    Main function used by the resume service.
-
-    No OpenAI.
-    No external API.
-    No API key.
-
-    Returns structured resume information.
-    """
+def extract_resume_with_ai(text: str) -> Dict[str, Any]:
 
     if not text:
-
         return {
             "name": None,
             "email": None,
@@ -1471,125 +1206,29 @@ def extract_resume_with_ai(text: str) -> Dict:
             "experience": [],
             "projects": [],
             "certifications": [],
-            "languages": []
+            "languages": [],
         }
 
-    cleaned_text = normalize_text(text)
-
-    # --------------------------------------------------------
-    # Extract
-    # --------------------------------------------------------
-
-    details = {
-
-        "name": extract_name(
-            cleaned_text
-        ),
-
-        "email": extract_email(
-            cleaned_text
-        ),
-
-        "phone": extract_phone(
-            cleaned_text
-        ),
-
-        "skills": extract_skills(
-            cleaned_text
-        ),
-
-        "education": extract_education(
-            cleaned_text
-        ),
-
-        "experience": extract_experience(
-            cleaned_text
-        ),
-
-        "projects": extract_projects(
-            cleaned_text
-        ),
-
-        "certifications": extract_certifications(
-            cleaned_text
-        ),
-
-        "languages": extract_languages(
-            cleaned_text
-        )
+    return {
+        "name": extract_name(text),
+        "email": extract_email(text),
+        "phone": extract_phone(text),
+        "skills": extract_skills(text),
+        "education": extract_education(text),
+        "experience": extract_experience(text),
+        "projects": extract_projects(text),
+        "certifications": extract_certifications(text),
+        "languages": extract_languages(text),
     }
 
-    # --------------------------------------------------------
-    # Language fallback
-    # --------------------------------------------------------
-
-    if not details["languages"]:
-
-        details["languages"] = (
-            extract_languages_from_resume(
-                cleaned_text
-            )
-        )
-
-    # --------------------------------------------------------
-    # Final cleanup
-    # --------------------------------------------------------
-
-    details["education"] = clean_education(
-        details["education"]
-    )
-
-    details["experience"] = clean_experience(
-        details["experience"]
-    )
-
-    details["skills"] = unique_list(
-        details["skills"]
-    )
-
-    details["projects"] = unique_list(
-        details["projects"]
-    )
-
-    details["certifications"] = unique_list(
-        details["certifications"]
-    )
-
-    details["languages"] = unique_list(
-        details["languages"]
-    )
-
-    return details
-
 
 # ============================================================
-# COMPATIBILITY ALIAS
+# COMPATIBILITY ALIASES
 # ============================================================
 
-def extract_candidate_details(text: str) -> Dict:
+def extract_candidate_details(text: str) -> Dict[str, Any]:
     """
-    Compatibility function.
-
-    If your existing resume_service.py imports:
-        extract_candidate_details
-
-    it will continue working.
+    Compatibility function used by resume_service.py / routes.
     """
 
     return extract_resume_with_ai(text)
-
-
-# ============================================================
-# OPTIONAL COMPLETE PROCESSOR
-# ============================================================
-
-def process_resume_text(text: str) -> Dict:
-
-    cleaned_text = normalize_text(text)
-
-    return {
-        "text": cleaned_text,
-        "details": extract_resume_with_ai(
-            cleaned_text
-        )
-    }

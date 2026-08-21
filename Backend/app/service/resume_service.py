@@ -1,8 +1,10 @@
+# app/service/resume_service.py
+
 import os
 import re
+from typing import Any, Dict, Optional
 
 import pdfplumber
-from docx import Document
 
 from app.service.ai_service import extract_resume_with_ai
 
@@ -11,467 +13,94 @@ from app.service.ai_service import extract_resume_with_ai
 # PDF TEXT EXTRACTION
 # ============================================================
 
-def extract_text_from_pdf(file_path: str) -> str:
+def extract_text_from_pdf(pdf_path: str) -> str:
+    """
+    Extract text from a PDF resume.
 
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(
-            "Resume file not found"
-        )
+    Works with normal text-based PDF resumes.
+    Returns an empty string if extraction fails.
+    """
 
-    pages_text = []
+    if not pdf_path:
+        return ""
+
+    if not os.path.exists(pdf_path):
+        raise FileNotFoundError(f"PDF file not found: {pdf_path}")
+
+    extracted_pages = []
 
     try:
-
-        with pdfplumber.open(file_path) as pdf:
+        with pdfplumber.open(pdf_path) as pdf:
 
             for page in pdf.pages:
 
-                words = page.extract_words(
-                    x_tolerance=3,
-                    y_tolerance=3,
-                    keep_blank_chars=False
-                )
+                try:
+                    text = page.extract_text(
+                        x_tolerance=2,
+                        y_tolerance=3
+                    )
 
-                if not words:
+                    if text:
+                        extracted_pages.append(text)
+
+                except Exception:
                     continue
 
-                # ------------------------------------------------
-                # GROUP WORDS INTO VISUAL LINES
-                # ------------------------------------------------
+    except Exception as exc:
+        raise RuntimeError(
+            f"Unable to read PDF file: {exc}"
+        ) from exc
 
-                lines = []
-
-                for word in sorted(
-                    words,
-                    key=lambda w: (
-                        w["top"],
-                        w["x0"]
-                    )
-                ):
-
-                    placed = False
-
-                    for line in lines:
-
-                        # Compare vertical position
-                        if abs(
-                            word["top"] - line["top"]
-                        ) <= 4:
-
-                            line["words"].append(
-                                word
-                            )
-
-                            placed = True
-                            break
-
-                    if not placed:
-
-                        lines.append({
-                            "top": word["top"],
-                            "words": [word]
-                        })
-
-                # ------------------------------------------------
-                # SORT WORDS INSIDE EACH LINE
-                # ------------------------------------------------
-
-                for line in lines:
-
-                    line["words"].sort(
-                        key=lambda w: w["x0"]
-                    )
-
-                # ------------------------------------------------
-                # SORT LINES TOP -> BOTTOM
-                # ------------------------------------------------
-
-                lines.sort(
-                    key=lambda line: line["top"]
-                )
-
-                # ------------------------------------------------
-                # BUILD TEXT
-                # ------------------------------------------------
-
-                page_lines = []
-
-                for line in lines:
-
-                    words_in_line = [
-                        word["text"]
-                        for word in line["words"]
-                    ]
-
-                    line_text = " ".join(
-                        words_in_line
-                    ).strip()
-
-                    if line_text:
-
-                        page_lines.append(
-                            line_text
-                        )
-
-                pages_text.append(
-                    "\n".join(page_lines)
-                )
-
-    except Exception as e:
-
-        raise ValueError(
-            f"Unable to read PDF: {str(e)}"
-        )
-
-    return "\n\n".join(
-        pages_text
-    ).strip()
-
-# ============================================================
-# DOCX TEXT EXTRACTION
-# ============================================================
-
-def extract_text_from_docx(file_path: str) -> str:
-
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(
-            "Resume file not found"
-        )
-
-    try:
-
-        document = Document(
-            file_path
-        )
-
-    except Exception as e:
-
-        raise ValueError(
-            f"Unable to read DOCX: {str(e)}"
-        )
-
-    text_parts = []
-
-    # --------------------------------------------------------
-    # Paragraphs
-    # --------------------------------------------------------
-
-    for paragraph in document.paragraphs:
-
-        text = paragraph.text.strip()
-
-        if text:
-            text_parts.append(
-                text
-            )
-
-    # --------------------------------------------------------
-    # Tables
-    # --------------------------------------------------------
-
-    for table in document.tables:
-
-        for row in table.rows:
-
-            row_parts = []
-
-            for cell in row.cells:
-
-                cell_text = cell.text.strip()
-
-                if cell_text:
-                    row_parts.append(
-                        cell_text
-                    )
-
-            if row_parts:
-
-                text_parts.append(
-                    " | ".join(row_parts)
-                )
-
-    return "\n".join(
-        text_parts
-    ).strip()
-
-
-# ============================================================
-# GENERAL RESUME TEXT EXTRACTION
-# ============================================================
-
-def extract_resume_text(file_path: str) -> str:
-
-    extension = os.path.splitext(
-        file_path
-    )[1].lower()
-
-    if extension == ".pdf":
-
-        return extract_text_from_pdf(
-            file_path
-        )
-
-    elif extension == ".docx":
-
-        return extract_text_from_docx(
-            file_path
-        )
-
-    else:
-
-        raise ValueError(
-            "Only PDF and DOCX files are supported"
-        )
+    return "\n".join(extracted_pages).strip()
 
 
 # ============================================================
 # TEXT CLEANING
 # ============================================================
 
-def clean_text(text: str) -> str:
+def clean_resume_text(text: str) -> str:
+    """
+    Cleans extracted PDF text without destroying useful information.
+    """
 
     if not text:
         return ""
 
-    # Normalize special spaces
-    text = text.replace(
-        "\xa0",
-        " "
-    )
-
     # Normalize line endings
-    text = text.replace(
-        "\r\n",
-        "\n"
-    )
+    text = text.replace("\r\n", "\n")
+    text = text.replace("\r", "\n")
 
-    text = text.replace(
-        "\r",
-        "\n"
-    )
-
-    lines = []
+    # Remove excessive spaces but preserve lines
+    cleaned_lines = []
 
     for line in text.split("\n"):
 
-        # Keep useful spaces
-        line = re.sub(
-            r"[ \t]+",
-            " ",
-            line
-        ).strip()
+        line = re.sub(r"[ \t]+", " ", line)
+        line = line.strip()
 
         if line:
-            lines.append(
-                line
-            )
+            cleaned_lines.append(line)
 
-    # Rebuild text
-    text = "\n".join(
-        lines
-    )
-
-    # Prevent huge gaps
-    text = re.sub(
-        r"\n{3,}",
-        "\n\n",
-        text
-    )
-
-    return text.strip()
+    return "\n".join(cleaned_lines)
 
 
 # ============================================================
-# EMAIL FALLBACK
+# RESUME EXTRACTION
 # ============================================================
 
-def extract_email(text: str):
-
-    if not text:
-        return None
-
-    pattern = (
-        r"[A-Za-z0-9._%+\-]+"
-        r"@"
-        r"[A-Za-z0-9.\-]+"
-        r"\."
-        r"[A-Za-z]{2,}"
-    )
-
-    match = re.search(
-        pattern,
-        text
-    )
-
-    if match:
-
-        return match.group(
-            0
-        ).lower().strip()
-
-    return None
-
-
-# ============================================================
-# PHONE FALLBACK
-# ============================================================
-
-def extract_phone(text: str):
-
-    if not text:
-        return None
-
-    # +91 9876543210
-    match = re.search(
-        r"(?:\+91|91)"
-        r"[\s\-]*"
-        r"([6-9]\d{4})"
-        r"[\s\-]*"
-        r"(\d{5})",
-        text
-    )
-
-    if match:
-
-        return (
-            match.group(1)
-            + match.group(2)
-        )
-
-    # 9876543210
-    match = re.search(
-        r"(?<!\d)"
-        r"([6-9]\d{4})"
-        r"[\s\-]*"
-        r"(\d{5})"
-        r"(?!\d)",
-        text
-    )
-
-    if match:
-
-        return (
-            match.group(1)
-            + match.group(2)
-        )
-
-    return None
-
-
-# ============================================================
-# DEFAULT DETAILS
-# ============================================================
-
-def empty_details():
-
-    return {
-        "name": None,
-        "email": None,
-        "phone": None,
-        "skills": [],
-        "education": [],
-        "experience": [],
-        "projects": [],
-        "certifications": [],
-        "languages": []
-    }
-
-
-# ============================================================
-# CANDIDATE DETAILS
-# ============================================================
-
-def extract_candidate_details(text: str):
-
-    cleaned_text = clean_text(
-        text
-    )
-
-    if not cleaned_text:
-
-        return empty_details()
-
-    # ========================================================
-    # LOCAL AI EXTRACTION
-    # ========================================================
-    #
-    # IMPORTANT:
-    # This calls our local ai_service.py.
-    #
-    # NO OpenAI
-    # NO API KEY
-    # NO INTERNET
-    #
-    # ========================================================
-
-    details = extract_resume_with_ai(
-        cleaned_text
-    )
-
-    # Safety check
-    if not isinstance(
-        details,
-        dict
-    ):
-
-        details = empty_details()
-
-    # ========================================================
-    # Make sure all fields exist
-    # ========================================================
-
-    defaults = empty_details()
-
-    for key, default_value in defaults.items():
-
-        if key not in details:
-
-            details[key] = default_value
-
-    # ========================================================
-    # Email fallback
-    # ========================================================
-
-    if not details.get(
-        "email"
-    ):
-
-        details["email"] = extract_email(
-            cleaned_text
-        )
-
-    # ========================================================
-    # Phone fallback
-    # ========================================================
-
-    if not details.get(
-        "phone"
-    ):
-
-        details["phone"] = extract_phone(
-            cleaned_text
-        )
-
-    return details
-
-
-# ============================================================
-# COMPLETE RESUME PROCESSOR
-# ============================================================
-
-def process_resume(file_path: str):
-
+def extract_candidate_details(text: str) -> Dict[str, Any]:
     """
-    Complete local resume processing.
+    Main function used by resume routes.
 
-    Returns:
+    Sends resume text to the local AI/parser service.
+    No OpenAI API is required.
+    """
 
-    {
-        "text": "...",
-        "details": {
-            "name": "...",
-            "email": "...",
-            "phone": "...",
+    if not text:
+        return {
+            "name": None,
+            "email": None,
+            "phone": None,
             "skills": [],
             "education": [],
             "experience": [],
@@ -479,34 +108,151 @@ def process_resume(file_path: str):
             "certifications": [],
             "languages": []
         }
-    }
-    """
 
-    # --------------------------------------------------------
-    # Extract PDF / DOCX
-    # --------------------------------------------------------
+    cleaned_text = clean_resume_text(text)
 
-    text = extract_resume_text(
-        file_path
-    )
+    try:
+        details = extract_resume_with_ai(cleaned_text)
 
-    # --------------------------------------------------------
-    # Clean extracted text
-    # --------------------------------------------------------
+    except Exception as exc:
+        print(
+            f"Resume extraction error: {exc}"
+        )
 
-    cleaned_text = clean_text(
-        text
-    )
+        details = {
+            "name": None,
+            "email": None,
+            "phone": None,
+            "skills": [],
+            "education": [],
+            "experience": [],
+            "projects": [],
+            "certifications": [],
+            "languages": []
+        }
 
-    # --------------------------------------------------------
-    # Local AI extraction
-    # --------------------------------------------------------
+    return normalize_candidate_details(details)
 
-    details = extract_candidate_details(
-        cleaned_text
-    )
+
+# ============================================================
+# NORMALIZE RESULT
+# ============================================================
+
+def normalize_candidate_details(
+    details: Optional[Dict[str, Any]]
+) -> Dict[str, Any]:
+
+    if not isinstance(details, dict):
+        details = {}
 
     return {
-        "text": cleaned_text,
+        "name": details.get("name"),
+
+        "email": details.get("email"),
+
+        "phone": details.get("phone"),
+
+        "skills": _ensure_list(
+            details.get("skills")
+        ),
+
+        "education": _ensure_list(
+            details.get("education")
+        ),
+
+        "experience": _ensure_list(
+            details.get("experience")
+        ),
+
+        "projects": _ensure_list(
+            details.get("projects")
+        ),
+
+        "certifications": _ensure_list(
+            details.get("certifications")
+        ),
+
+        "languages": _ensure_list(
+            details.get("languages")
+        )
+    }
+
+
+# ============================================================
+# LIST HELPER
+# ============================================================
+
+def _ensure_list(value):
+
+    if value is None:
+        return []
+
+    if isinstance(value, list):
+        return value
+
+    return [value]
+
+
+# ============================================================
+# COMPLETE PDF -> DETAILS PIPELINE
+# ============================================================
+
+def process_resume_pdf(pdf_path: str) -> Dict[str, Any]:
+    """
+    Complete pipeline:
+
+        PDF
+         ↓
+        text extraction
+         ↓
+        text cleaning
+         ↓
+        resume parser
+         ↓
+        structured details
+    """
+
+    text = extract_text_from_pdf(pdf_path)
+
+    if not text:
+        return {
+            "text": "",
+            "details": normalize_candidate_details({})
+        }
+
+    details = extract_candidate_details(text)
+
+    return {
+        "text": text,
         "details": details
     }
+
+
+# ============================================================
+# COMPATIBILITY FUNCTIONS
+# ============================================================
+
+def extract_resume_details(text: str) -> Dict[str, Any]:
+    """
+    Compatibility alias.
+
+    Some older routes may use this function name.
+    """
+
+    return extract_candidate_details(text)
+
+
+def parse_resume(text: str) -> Dict[str, Any]:
+    """
+    Compatibility alias for older code.
+    """
+
+    return extract_candidate_details(text)
+
+
+def analyze_resume(text: str) -> Dict[str, Any]:
+    """
+    Compatibility alias for older code.
+    """
+
+    return extract_candidate_details(text)
