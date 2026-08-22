@@ -532,52 +532,36 @@ def get_all_resumes():
 
 
 # =========================================================
-# VIEW / DOWNLOAD RESUME
+# OPEN / VIEW RESUME IN BROWSER
 # =========================================================
 
 @router.get("/file/{user_id}")
 def view_resume(user_id: int):
 
-    file_path = find_user_resume(
-        user_id
-    )
+    file_path = None
+
+    for filename in os.listdir(UPLOAD_DIR):
+
+        if (
+            filename.startswith(f"user_{user_id}_")
+            and filename.lower().endswith(".pdf")
+        ):
+            file_path = os.path.join(
+                UPLOAD_DIR,
+                filename
+            )
+            break
 
     if not file_path:
-
         raise HTTPException(
             status_code=404,
-            detail="Resume file not found"
+            detail="Resume PDF not found"
         )
-
-    filename = os.path.basename(
-        file_path
-    )
-
-    extension = os.path.splitext(
-        filename
-    )[1].lower()
-
-    if extension == ".pdf":
-
-        media_type = "application/pdf"
-
-    elif extension == ".docx":
-
-        media_type = (
-            "application/vnd.openxmlformats-officedocument."
-            "wordprocessingml.document"
-        )
-
-    else:
-
-        media_type = "application/octet-stream"
 
     return FileResponse(
-
         path=file_path,
-
-        filename=filename,
-
-        media_type=media_type
-
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": "inline"
+        }
     )
